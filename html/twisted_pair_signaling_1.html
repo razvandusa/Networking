@@ -1,0 +1,349 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Twisted Pair Signaling</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one readable column, animated circuit first, then the explanation in signal-path order. */
+:root{
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --bg:#F3F6F8; --surface:#FFFFFF; --ink:#15202A; --ink-2:#4B5A67; --line:#D3DBE1;
+  --high:#B8472C; --high-soft:#F8DED6;
+  --low:#2467AE; --low-soft:#D8E7F6;
+  --wire:#5F54CC; --electron:#2F7FD0; --gate:#D68A10;
+  --reg:#16765F; --reg-soft:#D3EEE5;
+  --accent:#2467AE; --note:#EEF2F5;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E151B; --surface:#161F27; --ink:#E5ECF1; --ink-2:#9BAAB6; --line:#2A3743;
+    --high:#F08A6C; --high-soft:#43271F;
+    --low:#74B1EA; --low-soft:#1B3652;
+    --wire:#A096F4; --electron:#5BA7F2; --gate:#F0B13B;
+    --reg:#4DC5A4; --reg-soft:#12372E;
+    --accent:#74B1EA; --note:#1B252E;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E151B; --surface:#161F27; --ink:#E5ECF1; --ink-2:#9BAAB6; --line:#2A3743;
+  --high:#F08A6C; --high-soft:#43271F;
+  --low:#74B1EA; --low-soft:#1B3652;
+  --wire:#A096F4; --electron:#5BA7F2; --gate:#F0B13B;
+  --reg:#4DC5A4; --reg-soft:#12372E;
+  --accent:#74B1EA; --note:#1B252E;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;
+  padding-block:32px 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+main{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:40px;min-width:0}
+h1{font-size:clamp(28px,5vw,38px);line-height:1.15;font-weight:600;margin:0 0 12px;text-wrap:balance;letter-spacing:-0.01em}
+h2{font-size:21px;line-height:1.3;font-weight:600;margin:0 0 12px;text-wrap:balance}
+p{margin:0 0 12px;max-width:65ch}
+p:last-child{margin-bottom:0}
+.lead{font-size:18px;color:var(--ink-2);max-width:62ch}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin:0 0 10px}
+section{min-width:0}
+code,.mono{font-family:var(--mono);font-size:.9em}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 12px 16px;min-width:0}
+.scroll{overflow-x:auto}
+.scroll svg{display:block;width:100%;min-width:600px;height:auto}
+svg text{font-family:var(--sans)}
+.t{font-size:14px;font-weight:600;fill:var(--ink)}
+.s{font-size:12px;fill:var(--ink-2)}
+.conn{stroke:var(--ink-2);stroke-width:3}
+.lead-line{stroke:var(--ink-2);stroke-width:1.5}
+.arrow{stroke:var(--ink-2);stroke-width:1.5;fill:none}
+.arrow-gate{stroke:var(--gate);stroke-width:1.5;fill:none}
+.bx{fill:var(--surface);stroke:var(--ink-2);stroke-width:1}
+.supply{fill:var(--note);stroke:var(--ink-2);stroke-width:1}
+.reg{fill:var(--reg-soft);stroke:var(--reg);stroke-width:1}
+.rail-h{fill:var(--high-soft);stroke:var(--high);stroke-width:1}
+.rail-l{fill:var(--low-soft);stroke:var(--low);stroke-width:1}
+.wireA{stroke:var(--wire);stroke-width:4}
+.gauge{fill:none;stroke:var(--line);stroke-width:1.5}
+.gfill{fill:var(--wire);opacity:.55}
+.chan{fill:var(--electron)}
+.pool{fill:var(--electron);opacity:.4}
+.ed{fill:var(--electron);stroke:var(--surface);stroke-width:1}
+.gate-plate{fill:var(--line)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 4px 0}
+.btn{font:inherit;font-size:14px;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:6px;padding:7px 14px;cursor:pointer}
+.btn:hover{background:var(--note)}
+.btn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--note)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.cap{min-height:3.2em;margin:12px 4px 0;font-size:14px;line-height:1.55;color:var(--ink-2);max-width:none}
+dl.terms{margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+dl.terms>div{min-width:0}
+dl.terms dt{font-weight:600;margin:0 0 2px}
+dl.terms dd{margin:0;color:var(--ink);max-width:65ch}
+.dot-h,.dot-l,.dot-w{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:0}
+.dot-h{background:var(--high)}.dot-l{background:var(--low)}.dot-w{background:var(--wire)}
+ol.path{margin:0;padding:0;list-style:none;counter-reset:step;display:flex;flex-direction:column;gap:18px}
+ol.path li{counter-increment:step;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+ol.path li::before{content:counter(step);font-family:var(--mono);font-size:13px;width:28px;height:28px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-2);background:var(--surface);margin-top:1px}
+ol.path h3{font-size:16px;font-weight:600;margin:0 0 2px}
+ol.path p{margin:0;max-width:62ch}
+.tablewrap{overflow-x:auto;margin:16px 0 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:420px;font-size:15px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+th{font-weight:600;color:var(--ink-2);font-size:13px;background:var(--note)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+.tcap{font-size:13px;color:var(--ink-2);margin:0}
+ul.plain{margin:0 0 12px;padding-left:20px;max-width:65ch}
+ul.plain li{margin:0 0 6px}
+.note{background:var(--note);border-radius:8px;padding:14px 16px;font-size:15px;max-width:none}
+@media (max-width:480px){ body{padding-block:20px 40px} main{gap:32px} }
+</style>
+
+<main>
+  <header>
+    <p class="eyebrow">Ethernet · physical layer</p>
+    <h1>Twisted pair signaling</h1>
+    <p class="lead">Ethernet sends bits as small changes of voltage on pairs of copper wires. The animation shows how a transistor connects a wire to a high or a low voltage rail. The notes below explain each part of it, then what noise does to that voltage and how the receiver still reads the right bit.</p>
+  </header>
+
+  <section aria-labelledby="h-anim">
+    <h2 id="h-anim">How a wire gets its voltage</h2>
+    <div class="fig">
+      <div class="scroll">
+<svg viewBox="0 0 680 490" role="img" aria-label="Animated circuit: a regulator holds the high rail at 3.3 V, the low rail is a very long strip at 0 V, and one transistor at a time connects wire A to a rail.">
+<title>Wire A switched between a regulated high rail and a long low rail</title>
+<desc>A supply feeds a regulator that holds the high rail at 3.3 V. The low rail is a very long strip at 0 V holding a huge pool of electrons. Two transistors connect wire A to one rail at a time, and the voltage on wire A follows the rail.</desc>
+<defs>
+<marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</marker>
+</defs>
+
+<rect class="supply" x="20" y="14" width="80" height="56" rx="6"/>
+<text class="t" x="60" y="33" text-anchor="middle" dominant-baseline="central">Supply</text>
+<text class="s" x="60" y="52" text-anchor="middle" dominant-baseline="central">5 V in</text>
+<line class="arrow" x1="100" y1="42" x2="138" y2="42" marker-end="url(#arrowhead)"/>
+<rect class="reg" x="140" y="14" width="120" height="56" rx="6"/>
+<text class="t" x="200" y="33" text-anchor="middle" dominant-baseline="central">Regulator</text>
+<text class="s" x="200" y="52" text-anchor="middle" dominant-baseline="central">holds 3.3 V</text>
+<line class="conn" x1="200" y1="70" x2="200" y2="86"/>
+
+<rect class="rail-h" x="130" y="86" width="140" height="10" rx="3"/>
+<text class="t" x="285" y="91" dominant-baseline="central">High rail: 3.3 V</text>
+
+<line class="conn" x1="200" y1="96" x2="200" y2="160"/>
+<line class="conn" x1="200" y1="240" x2="200" y2="320"/>
+<line class="conn" x1="200" y1="400" x2="200" y2="454"/>
+
+<rect class="rail-l" x="20" y="454" width="640" height="10" rx="3"/>
+<g id="pool"></g>
+<text class="t" x="285" y="441" dominant-baseline="central">Low rail: 0 V</text>
+<text class="s" x="660" y="441" text-anchor="end" dominant-baseline="central">goes through the whole device</text>
+
+<rect class="bx" x="170" y="160" width="60" height="80" rx="4"/>
+<rect id="chn1" class="chan" x="192" y="162" width="16" height="76" rx="3" opacity="0"/>
+<rect id="gt1" class="gate-plate" x="244" y="180" width="8" height="40" rx="2"/>
+<line class="lead-line" x1="252" y1="200" x2="280" y2="200"/>
+<line id="fa1" class="arrow-gate" x1="242" y1="200" x2="214" y2="200" marker-end="url(#arrowhead)" opacity="0"/>
+<text id="gl1" class="s" x="286" y="200" dominant-baseline="central">gate: 0 V</text>
+<text class="t" x="20" y="200" dominant-baseline="central">Top transistor</text>
+<text class="s" x="162" y="168" text-anchor="end" dominant-baseline="central">source</text>
+<text class="s" x="162" y="232" text-anchor="end" dominant-baseline="central">drain</text>
+
+<rect class="bx" x="170" y="320" width="60" height="80" rx="4"/>
+<rect id="chn0" class="chan" x="192" y="322" width="16" height="76" rx="3" opacity="0"/>
+<rect id="gt0" class="gate-plate" x="244" y="340" width="8" height="40" rx="2"/>
+<line class="lead-line" x1="252" y1="360" x2="280" y2="360"/>
+<line id="fa0" class="arrow-gate" x1="242" y1="360" x2="214" y2="360" marker-end="url(#arrowhead)" opacity="0"/>
+<text id="gl0" class="s" x="286" y="360" dominant-baseline="central">gate: 0 V</text>
+<text class="t" x="20" y="360" dominant-baseline="central">Bottom transistor</text>
+
+<line class="wireA" x1="200" y1="280" x2="470" y2="280"/>
+<text class="t" x="335" y="262" text-anchor="middle">Wire A</text>
+
+<text class="t" x="488" y="158" text-anchor="middle">Voltage on wire A</text>
+<rect class="gauge" x="470" y="180" width="36" height="200" rx="4"/>
+<rect id="gf" class="gfill" x="471" y="380" width="34" height="0"/>
+<text class="s" x="516" y="180" dominant-baseline="central">3.3 V</text>
+<text class="s" x="516" y="380" dominant-baseline="central">0 V</text>
+<text id="ro" class="t" x="488" y="402" text-anchor="middle">0.0 V</text>
+
+<g id="dots"></g>
+</svg>
+      </div>
+      <div class="controls">
+        <button class="btn" id="b1" type="button" aria-pressed="false">Send 1</button>
+        <button class="btn" id="b0" type="button" aria-pressed="true">Send 0</button>
+        <button class="btn" id="bauto" type="button" aria-pressed="false">Auto-play</button>
+      </div>
+      <p class="cap" id="cap" aria-live="polite">Sending a 0: the bottom transistor is on, so wire A is tied to the low rail (0 V).</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-read">
+    <h2 id="h-read">Reading the diagram</h2>
+    <dl class="terms">
+      <div>
+        <dt><span class="dot-h"></span>High rail</dt>
+        <dd>A copper path held at 3.3 V. A regulator takes a bigger supply, such as a 5 V or 12 V input, and steps it down. It adds or removes charge as needed, so the rail stays at 3.3 V even when electrons flow into it.</dd>
+      </div>
+      <div>
+        <dt><span class="dot-l"></span>Low rail</dt>
+        <dd>A copper path connected to the negative side of the supply. It is the reference point, so its voltage is 0 V by definition, like the floor you measure height from. In a real device it is one large copper area shared by the whole board. It holds so many electrons that a wire taking or giving a few does not change its level, which is why it needs no regulator.</dd>
+      </div>
+      <div>
+        <dt>Transistor</dt>
+        <dd>A switch controlled by a voltage. The gate is a small plate above the silicon, separated from it by a thin insulator. A voltage on the gate creates an electric field that pulls electrons together under it and forms a channel. Without the gate voltage the channel disappears and the switch is off.</dd>
+      </div>
+      <div>
+        <dt><span class="dot-w"></span>Wire A</dt>
+        <dd>It connects to one rail at a time, never both. With the top transistor on, wire A copies the high rail and reads as a 1. With the bottom transistor on, it copies the low rail and reads as a 0. The transistor connects the wire to a rail that already has the voltage; it does not make voltage.</dd>
+      </div>
+      <div>
+        <dt>Which way the electrons go</dt>
+        <dd>Electrons are negative, so they move toward the more positive side. Sending a 1 pulls electrons out of wire A into the high rail. A wire with fewer electrons than normal is more positive, so its voltage rises. Sending a 0 lets electrons flow in from the low rail, and the voltage falls. Wire A only has to lose a tiny fraction of its electrons to reach 3.3 V.</dd>
+      </div>
+      <div>
+        <dt>Why the flow stops</dt>
+        <dd>Electrons move because there is a voltage difference. When wire A reaches the voltage of the rail it is connected to, nothing pushes them anymore, and wire A stays at that level until the transistors switch.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section aria-labelledby="h-motor">
+    <h2 id="h-motor">What a motor does to a wire</h2>
+    <p>A motor has coils carrying changing current and magnets that spin, so the magnetic field around it keeps changing. A changing field pushes on charges, including the free electrons in the copper of a nearby cable. This is called induction. The push is along the wire, and the electrons cannot leave it.</p>
+    <p>Pushed toward one end, the electrons bunch up there. That end has slightly more electrons than normal and the other end slightly fewer. As in the animation, an uneven spread of electrons is a voltage. Picture a water pipe closed at both ends. Pushing the water toward one end leaves the total unchanged, but the pressure rises at that end and falls at the other. The receiver is a pressure gauge at the end of the pipe. The wire is also part of a loop with the transmitter and the receiver, so the push drives a tiny current through the receiver's input, and that is what it measures.</p>
+    <p>Having a lot of electrons in the cable does not protect the signal. Voltage depends on the imbalance, and the real signal is also a tiny imbalance, since wire A only has to lose a small fraction of its electrons to reach 3.3 V. Noise creates the same kind of tiny imbalance, so the receiver cannot tell the two apart. If the push is small compared with the signal, for example a few millivolts against about a volt, it does not matter, which is why most cables work next to appliances. It becomes a problem with a strong motor, a long cable that catches more of the field, or a small signal.</p>
+    <p>The motor's field keeps changing direction, so the electrons move back and forth at the motor's frequency. The noise wiggles up and down on top of the signal.</p>
+  </section>
+
+  <section aria-labelledby="h-measure">
+    <h2 id="h-measure">How voltage is measured</h2>
+    <p>Voltage always exists between two points. A voltmeter has two probes. The extra electrons at one point repel each other and push toward a point that has fewer, and the meter measures how strong that push is between its probes. It does not count electrons. A single wire has no voltage of its own. A voltage exists between wire A and wire B, or between a wire and ground.</p>
+    <p>The receiver does the same with its two inputs. One is connected to wire A and the other to wire B, both at the receiver end of the cable. A sensitive amplifier senses the difference in push between them and lets almost no current through, so measuring does not disturb the signal. Voltage is not exactly the imbalance. The imbalance creates the push, and the voltage is how strong that push is between two points.</p>
+  </section>
+
+  <section aria-labelledby="h-bit">
+    <h2 id="h-bit">How a bit is sent and read</h2>
+    <p>The receiver does not pick the wire that has fewer electrons. It computes A − B. If the result is above 0 V it reads a 1, and if it is below 0 V it reads a 0. The transmitter should therefore send two states whose differences have opposite signs and sit as far from zero as possible. The table compares two ways to do it, using example voltages.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Scheme</th><th>Sending a 1</th><th>Sending a 0</th><th>Margin</th></tr></thead>
+        <tbody>
+          <tr><td>Opposite voltages</td><td>A +1 V, B −1 V<br>A − B = +2 V</td><td>A −1 V, B +1 V<br>A − B = −2 V</td><td>2 V each side of 0 V</td></tr>
+          <tr><td>A at 0 V for a 1, both at −1 V for a 0</td><td>A 0 V, B −1 V<br>A − B = +1 V</td><td>A −1 V, B −1 V<br>A − B = 0 V</td><td>0.5 V each side of +0.5 V</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tcap">The second scheme can work, but its margin is four times smaller.</p>
+    <p style="margin-top:16px">Opposite voltages have two more benefits. The two wires always carry opposite voltages, so their average is 0 V and the fields they radiate cancel at a distance, which reduces crosstalk into neighboring pairs. The signal also has no steady offset, which suits the transformer in an Ethernet port. The receiver ignores the absolute levels. A = 0 V with B = −1 V gives the same difference as A = +1 V with B = 0 V.</p>
+  </section>
+
+  <section aria-labelledby="h-flip">
+    <h2 id="h-flip">When noise flips a bit</h2>
+    <p>Only the unequal part of the noise can flip a bit. Take a 0 sent as A = −1 V and B = +1 V, so A − B = −2 V, and a motor that adds +3 V.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Case</th><th class="num">A</th><th class="num">B</th><th class="num">A − B</th><th>Read as</th></tr></thead>
+        <tbody>
+          <tr><td>No noise</td><td class="num">−1 V</td><td class="num">+1 V</td><td class="num">−2 V</td><td>0</td></tr>
+          <tr><td>+3 V on both wires</td><td class="num">+2 V</td><td class="num">+4 V</td><td class="num">−2 V</td><td>0</td></tr>
+          <tr><td>+3 V on wire A only</td><td class="num">+2 V</td><td class="num">+1 V</td><td class="num">+1 V</td><td>1, which is wrong</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tcap">Equal noise cancels in the subtraction. In the last row the unequal part (3 V) is larger than the signal's margin (2 V), so the sign flips.</p>
+    <p style="margin-top:16px">When a bit flips, the frame's checksum (the CRC) does not match and the frame is dropped. A higher layer such as TCP sends it again, which shows up as lag, slow transfers, or a link that keeps dropping.</p>
+  </section>
+
+  <section aria-labelledby="h-same">
+    <h2 id="h-same">Twisting gives both wires the same push</h2>
+    <p>Noise is stronger on the wire that is closer to its source. In parallel wires the same wire is always the closer one, so the pushes differ. Twisting swaps the two wires every few millimeters, so each spends about half its length near the source and half away from it. The twists also alternate direction, so the push along one twist is partly cancelled by the next.</p>
+    <p>Both wires end up shifted by almost the same amount. Each wire alone still measures something different from what was sent, but A − B equals what the transmitter sent, and the bit is read correctly. The cancellation is not perfect. A small unequal part is left, far smaller than the signal's margin.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+var HI=3.3,NS='http://www.w3.org/2000/svg';
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var $=function(i){return document.getElementById(i)};
+var pathHi=[[455,280],[200,280],[200,72]];
+var pathLo=[[640,459],[200,459],[200,280],[455,280]];
+function plen(p){var L=0;for(var i=1;i<p.length;i++)L+=Math.abs(p[i][0]-p[i-1][0])+Math.abs(p[i][1]-p[i-1][1]);return L}
+function pos(p,d){for(var i=1;i<p.length;i++){var a=p[i-1],b=p[i],l=Math.abs(b[0]-a[0])+Math.abs(b[1]-a[1]);if(d<=l){var f=d/l;return[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f]}d-=l}return p[p.length-1]}
+var pg=$('pool');
+for(var x=40;x<=640;x+=30){var s=document.createElementNS(NS,'circle');s.setAttribute('cx',x);s.setAttribute('cy',459);s.setAttribute('r',3);s.setAttribute('class','pool');pg.appendChild(s)}
+var N=14,dots=[],dg=$('dots');
+for(var i=0;i<N;i++){var c=document.createElementNS(NS,'circle');c.setAttribute('r','4');c.setAttribute('class','ed');c.style.opacity='0';dg.appendChild(c);dots.push(c)}
+var target=0,gate=[true,false],ch=[1,0],level=0,phase='done',flowT=0,timers=[],auto=false,autoT=null,touched=false;
+function nm(k){return k?'top':'bottom'}
+function cap(t){$('cap').textContent=t}
+function updateBtns(){$('b1').setAttribute('aria-pressed',String(target===1));$('b0').setAttribute('aria-pressed',String(target===0))}
+function doneText(b){return 'Wire A is now at '+(b?'3.3':'0')+' V and the flow stops. That is a '+b+'. The rails stayed exactly where they were.'}
+function flowText(b){return b?'The channel links wire A to the high rail. Electrons flow into the rail, and the regulator carries them away so the rail stays at 3.3 V.':'The channel links wire A to the low rail. Electrons flow in from the long low rail, which is so big that its level does not change.'}
+function render(){
+for(var k=0;k<2;k++){
+$('chn'+k).setAttribute('opacity',(ch[k]*0.6).toFixed(2));
+$('gt'+k).style.fill=gate[k]?'var(--gate)':'var(--line)';
+$('fa'+k).setAttribute('opacity',gate[k]?'1':'0');
+$('gl'+k).textContent='gate: '+(gate[k]?'3.3':'0')+' V';
+}
+var h=200*level;
+$('gf').setAttribute('y',(380-h).toFixed(1));
+$('gf').setAttribute('height',h.toFixed(1));
+$('ro').textContent=(level*HI).toFixed(1)+' V';
+var p=target?pathHi:pathLo,L=plen(p);
+for(var i=0;i<N;i++){
+if(phase==='flow'&&!reduce){var d=((i*L/N)+flowT*150)%L,q=pos(p,d);dots[i].setAttribute('cx',q[0].toFixed(1));dots[i].setAttribute('cy',q[1].toFixed(1));dots[i].style.opacity='1'}
+else dots[i].style.opacity='0';
+}
+}
+function setBit(b){
+if(b===target&&phase!=='off')return;
+timers.forEach(clearTimeout);timers=[];
+var o=1-b;target=b;updateBtns();
+if(reduce){gate[b]=true;gate[o]=false;ch[b]=1;ch[o]=0;level=b;phase='done';flowT=0;cap(doneText(b));render();return}
+gate[o]=false;phase='off';flowT=0;
+cap('The '+nm(o)+' gate drops to 0 V, so its channel disappears.');
+timers.push(setTimeout(function(){gate[b]=true;phase='gate';cap('The '+nm(b)+' gate is given 3.3 V. Its electric field reaches into the silicon.')},700));
+}
+function setAuto(on){
+auto=on;$('bauto').setAttribute('aria-pressed',String(on));clearInterval(autoT);
+if(on){setBit(1-target);autoT=setInterval(function(){setBit(1-target)},5600)}
+}
+$('b1').onclick=function(){touched=true;setAuto(false);setBit(1)};
+$('b0').onclick=function(){touched=true;setAuto(false);setBit(0)};
+$('bauto').onclick=function(){touched=true;setAuto(!auto)};
+var last=performance.now();
+function frame(now){
+var dt=Math.min(0.05,(now-last)/1000);last=now;
+if(!reduce){
+for(var k=0;k<2;k++){
+var goal=gate[k]?1:0,r=gate[k]?0.9:3;
+if(ch[k]<goal)ch[k]=Math.min(goal,ch[k]+r*dt);else if(ch[k]>goal)ch[k]=Math.max(goal,ch[k]-r*dt);
+}
+if(phase==='gate'&&ch[target]>0.4){phase='channel';cap('The field pulls electrons together under the gate: a channel forms.')}
+if(phase==='channel'&&ch[target]>=0.99){phase='flow';flowT=0;cap(flowText(target))}
+if(phase==='flow'){
+flowT+=dt;
+if(level<target)level=Math.min(target,level+0.55*dt);else level=Math.max(target,level-0.55*dt);
+if(level===target){phase='done';cap(doneText(target))}
+}
+}
+render();
+requestAnimationFrame(frame);
+}
+render();
+requestAnimationFrame(frame);
+setTimeout(function(){if(!touched)setAuto(true)},900);
+})();
+</script>
+
+</body></html>
