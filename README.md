@@ -52,6 +52,12 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [Wired](#wired)
   - [Connectors](#connectors)
 
+**IP addressing**
+- [IPv4 Addressing](#ipv4-addressing)
+  - [Public vs. Private IPv4 addresses](#public-vs-private-ipv4-addresses)
+  - [NAT and PAT](#nat-and-pat)
+  - [Private IP Address Classes](#private-ip-address-classes)
+
 ## Fundamentals
 
 ### Network Topologies and Types
@@ -495,21 +501,20 @@ IPsec was developed to ensure that the data cannot be stolen by protecting the d
 
 - IPsec creates **secure tunnels** (a tunnel isn't a real physical path, it's a name for what happens when a packet gets wrapped inside another) to protect the data during transfer, and it is done in two phases using a protocol called **IKE (Internet Key Exchange)**:
   1. **Phase 1:** The 2 sites will identify each other and negotiate parameters for authentication and encryption methods. This is the first tunnel that is used to protect the negotiation process.
-  2. **Phase 2:** Creation of the IPsec tunnel, and in this tunnel the protected data is going to be exchanged between the two sides.
-- Before the data is sent, it needs to be protected, and this can be done by using a couple of different protocols:
-	  1. **AH - Authentication Header:** It offers authentication and integrity, but it doesn't do any encryption
-	  2. **ESP - Encapsulating Security Payload:** It is the better of the two protocols. ESP does offer all three: authentication, integrity, and encryption
-
-- In order to use IPsec, both sender and receiver must **share a public or private key**. This key is what locks and unlocks the encrypted data as it travels across a network. This ensures that the data cannot be read and tampered with. The sender will secure the data by encrypting it with the key and the receiver will use the key to decrypt the data so it can be read.
-- **Diffie-Hellman Key Exchange:** Both sides publicly agree on **P** (a large prime, prime becua) and **G** (a base). Each then picks a private number it never shares: Alice picks **a**, Bob picks **b**. Each computes a public number and sends it over the network:
-  - Alice sends A = G^a mod P
-  - Bob sends B = G^b mod P
-
-  Each then raises the other's public number to their own private number:
-  - Alice computes B^a mod P
-  - Bob computes A^b mod P
-
-  Both results equal **G^(a·b) mod P**, so they get the same shared key. Only G, P, A and B ever cross the network, and recovering a or b from them is the **discrete logarithm problem**, which is infeasible at real sizes.
+	- In order to use IPsec, both sender and receiver must **share a public or private key**. This key is what locks and unlocks the encrypted data as it travels across a network. This ensures that the data cannot be read and tampered with. The sender will secure the data by encrypting it with the key and the receiver will use the key to decrypt the data so it can be read.
+	- **Diffie-Hellman Key Exchange:** Both sides publicly agree on **P** (a large prime, prime becua) and **G** (a base). Each then picks a private number it never shares: Alice picks **a**, Bob picks **b**. Each computes a public number and sends it over the network:
+	  - Alice sends A = G^a mod P
+	  - Bob sends B = G^b mod P
+	
+	  Each then raises the other's public number to their own private number:
+	  - Alice computes B^a mod P
+	  - Bob computes A^b mod P
+	
+	  Both results equal **G^(a·b) mod P**, so they get the same shared key. Only G, P, A and B ever cross the network, and recovering a or b from them is the **discrete logarithm problem**, which is infeasible at real sizes.
+  1. **Phase 2:** Creation of the IPsec tunnel, and in this tunnel the protected data is going to be exchanged between the two sides.
+	- Before the data is sent, it needs to be protected, and this can be done by using a couple of different protocols:
+		  1. **AH - Authentication Header:** It offers authentication and integrity, but it doesn't do any encryption
+		  2. **ESP - Encapsulating Security Payload:** It is the better of the two protocols. ESP does offer all three: authentication, integrity, and encryption
 
   ![](images/diffie_hellman_key_exchange.png)
 
@@ -805,5 +810,71 @@ It uses **pulses of light** to send data, and as a result it is **very fast** an
 - A **large** connector developed by **AT&T**. Because of its large size, its usage has **declined** in favor of smaller connectors such as the **LC** and the **MTRJ**.
 
 ![](images/st_connector.png)
+
+[↑ Back to top](#networking)
+
+## IP addressing
+
+### IPv4 Addressing
+
+#### Public vs. Private IPv4 addresses
+
+##### Public IP addresses
+When you order internet service from a company, they assign the modem in your home or business a **public IP address**.
+- A public IP address is **registered** on the internet. It is what gives you access to the World Wide Web, so if you don't have a public IP, you **cannot access the internet**.
+- Public IP addresses are **unique**, so there are **no duplicates**.
+
+> [!WARNING]
+> **The IPv4 shortage**
+>
+> When public IP addresses were created, engineers didn't realize how big the internet would become. Even though there were **over 4 billion IPv4 addresses** available, the engineers thought this would be enough, but they were wrong.
+>
+> To prevent a shortage of public IPv4 addresses, engineers from the **Internet Engineering Task Force** developed **private IP addresses** in a document labeled **RFC 1918**.
+
+##### Private IP addresses
+- Private IP addresses are **not publicly registered** on the internet, so you **can't access the internet** using a private IP address.
+- If your device has a private IP address and you want to access the internet, your private IP has to be **converted into a public IP address** first.
+- Private IP addresses are only used **internally**, such as inside a home or a business, and are not used on the public internet.
+
+---
+#### NAT and PAT
+
+##### NAT
+The service that converts (translates) a private IP address into a public IP address is called **NAT** (**Network Address Translation**).
+- This service is **built into a router**.
+- It translates **both ways**:
+	- **private → public**
+	- **public → private**: if a computer on the internet wants to communicate with a computer on this private network, NAT needs to translate the public IP address to the private IP address of that computer.
+
+![](images/image.jpg)
+
+##### PAT
+**PAT** (**Port Address Translation**) is an **extension of NAT**.
+
+> [!IMPORTANT]
+> **The problem with only NAT**
+>
+> With only NAT, we can't have **multiple devices** accessing the internet through a router. When a reply comes back, the router's job is to translate it into the right **private** IP. With only NAT and several devices, **every reply has the same destination**, so the router can't decide which private IP to pick.
+
+> [!TIP]
+> **How PAT fixes it**
+>
+> PAT gives **each connection its own port number**, which allows devices on a private network to **share a single public IP address**. When the router gets a reply, it can decide which private IP to pick, because the **port number is mapped to the private IP**.
+
+![](images/pat.png)
+
+---
+#### Private IP Address Classes
+Private IP addresses come from **special ranges** that are **reserved for use in local networks** and are **never used on the public internet**.
+
+There are **3 different classes** of private IP addresses, and each class has a different range:
+
+| Class | Starts with | Range | Used for |
+| --- | --- | --- | --- |
+| **Class A** | 10 | 10.x.x.x | Large organizations |
+| **Class B** | 172 | 172.16.x.x to 172.31.x.x | Medium-size organizations |
+| **Class C** | 192.168 | 192.168.x.x | Small organizations or homes |
+
+![](images/private_ip_address_classes.png)
 
 [↑ Back to top](#networking)

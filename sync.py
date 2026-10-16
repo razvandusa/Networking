@@ -23,6 +23,7 @@ GROUPS = {
     "Cloud & virtualization": ["Virtualization", "VPC", "Cloud"],
     "Ports & protocols": ["Ports, Protocols, Services & Traffic Types"],
     "Cabling & transmission": ["Transmission media & Transceivers"],
+    "IP addressing": ["IPv4 Addressing"],
 }
 
 CALLOUTS = {
