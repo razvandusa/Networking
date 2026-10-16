@@ -23,7 +23,7 @@ GROUPS = {
     "Cloud & virtualization": ["Virtualization", "VPC", "Cloud"],
     "Ports & protocols": ["Ports, Protocols, Services & Traffic Types"],
     "Cabling & transmission": ["Transmission media & Transceivers"],
-    "IP addressing": ["IPv4 Addressing"],
+    "IP addressing": ["IPv4 Addressing", "Subnet Mask"],
 }
 
 CALLOUTS = {
@@ -115,7 +115,7 @@ def convert(title, body, notes, files, anchors, used_images, used_html):
         m = re.match(r"(#{1,6}) (.*)", line)
         if m:
             text = m.group(2).strip()
-            if text == title:
+            if text == title and not any(o.strip() for o in out):
                 continue  # redundant repeat of the note title
             heading = text
             level = min(len(m.group(1)) + 2, 6)
@@ -160,6 +160,7 @@ def convert(title, body, notes, files, anchors, used_images, used_html):
 
         line = WIKILINK.sub(link, line)
         line = re.sub(r"!\[\]\((https?://[^)]+)\)", r"[\1](\1)", line)
+        line = re.sub(r"<(/?)u>", r"<\1ins>", line)  # GitHub strips <u>
         out.append(line)
     return out, subheadings
 

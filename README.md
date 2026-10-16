@@ -57,6 +57,14 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [Public vs. Private IPv4 addresses](#public-vs-private-ipv4-addresses)
   - [NAT and PAT](#nat-and-pat)
   - [Private IP Address Classes](#private-ip-address-classes)
+- [Subnet Mask](#subnet-mask)
+  - [IP address](#ip-address)
+  - [Network address & Host address](#network-address--host-address)
+  - [8-bit octet chart](#8-bit-octet-chart)
+  - [Subnet Mask](#subnet-mask-1)
+  - [CIDR](#cidr)
+  - [Public IP Address Classes](#public-ip-address-classes)
+  - [Subnetting](#subnetting)
 
 ## Fundamentals
 
@@ -869,12 +877,191 @@ Private IP addresses come from **special ranges** that are **reserved for use in
 
 There are **3 different classes** of private IP addresses, and each class has a different range:
 
-| Class | Starts with | Range | Used for |
-| --- | --- | --- | --- |
-| **Class A** | 10 | 10.x.x.x | Large organizations |
-| **Class B** | 172 | 172.16.x.x to 172.31.x.x | Medium-size organizations |
-| **Class C** | 192.168 | 192.168.x.x | Small organizations or homes |
+| Class       | Starts with | Range                    | Used for                     |
+| ----------- | ----------- | ------------------------ | ---------------------------- |
+| **Class A** | 10          | 10.x.x.x                 | Large organizations          |
+| **Class B** | 172         | 172.16.x.x to 172.31.x.x | Medium-size organizations    |
+| **Class C** | 192.168     | 192.168.x.x              | Small organizations or homes |
 
 ![](images/private_ip_address_classes.png)
+
+[↑ Back to top](#networking)
+
+---
+
+### Subnet Mask
+
+#### IP address
+An **IP address** is an **identifier** for a computer or device on a network.
+- Every device has to have an IP address for communication purposes, more specifically an **IPv4 address**.
+
+![](images/ip_address.png)
+
+An **IPv4 address** is a **32-bit numeric address** written as **four numbers separated by periods**.
+- Each group of numbers separated by periods is called an **octet**.
+- The number range in each octet is from **0 to 255**.
+
+![](images/ip_address_2.png)
+
+---
+#### Network address & Host address
+An IP address consists of **two parts**:
+1. **Network address** (network ID): a number assigned to a **network**, so every network has a **unique** address.
+2. **Host address** (host ID): what is assigned to **hosts** such as computers, servers, tablets and routers **within that network**. Every host has a **unique** host address.
+
+![](images/network_address_host_address.png)
+
+---
+#### 8-bit octet chart
+In the computer world, IP addresses and subnet masks are not in decimal, because computers and networks don't read them in this format. They only understand numbers in **binary format**: **ones and zeros**.
+
+> [!TIP]
+> **Example**
+>
+> The binary number for this IP address:
+> **192.168.1.0** → **11000000.10101000.00000001.00000000**
+
+**How do you get the binary numbers from an IP address?** We use the **8-bit octet chart**:
+
+| 8th bit | 7th bit | 6th bit | 5th bit | 4th bit | 3rd bit | 2nd bit | 1st bit |
+| ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- |
+| 128     | 64      | 32      | 16      | 8       | 4       | 2       | 1       |
+| 0/1     | 0/1     | 0/1     | 0/1     | 0/1     | 0/1     | 0/1     | 0/1     |
+
+- Each bit in an octet is **represented by a number**: the 8th bit by 128, the 7th bit by 64, the 6th bit by 32, and so on.
+- Each bit in an octet can be either a **1** or a **0**:
+	- If the bit is a **1**, the number it represents **counts**.
+	- If the bit is a **0**, the number it represents **does not count**.
+- So by manipulating the 1s and 0s in the octet, you can come up with any number from **0 to 255**.
+
+**E.g. for 192.168.1.0:**
+
+| 8th bit | 7th bit | 6th bit | 5th bit | 4th bit | 3rd bit | 2nd bit | 1st bit | Number  |
+| ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- | ------- |
+| 128     | 64      | 32      | 16      | 8       | 4       | 2       | 1       | -       |
+| 1       | 1       | 0       | 0       | 0       | 0       | 0       | 0       | **192** |
+| 1       | 0       | 1       | 0       | 1       | 0       | 0       | 0       | **168** |
+| 0       | 0       | 0       | 0       | 0       | 0       | 0       | 1       | **1**   |
+| 0       | 0       | 0       | 0       | 0       | 0       | 0       | 0       | **0**   |
+
+- 128 + 64 = **192**
+- 128 + 32 + 8 = **168**
+- 1 = **1**
+- 0 = **0**
+
+So **192.168.1.0**<sub>(10)</sub> is **11000000.10101000.00000001.00000000**<sub>(2)</sub>
+
+---
+#### Subnet Mask
+The **subnet mask** is how you tell which portion of the IP address is the **network** and which is the **host**.
+
+A subnet mask is a **32-bit value** made of 1s and 0s:
+- the **1s** in the subnet mask indicate the **network address**
+- the **0s** in the subnet mask indicate the **host addresses**
+
+Wherever a binary digit of the subnet mask is a **1**, it indicates a position in the IP address that defines the **network**.
+
+1. 1st example:
+
+![](images/subnet_mask.png)
+
+2. 2nd example:
+
+![](images/subnet_mask_2.png)
+
+---
+#### CIDR
+Subnet masks can also be expressed using a different method called **CIDR** (**Classless Inter-Domain Routing**), also known as **slash notation**.
+- Slash notation is a **shorter way to write a subnet mask**.
+- It is written as a **forward slash** followed by a number **counting the 1s** in the subnet mask.
+
+> [!TIP]
+> **Example**
+>
+> **192.168.1.0/24** ↔ 11111111.11111111.11111111.00000000 ↔ **255.255.255.0**
+> (The /24 means that the mask has **24 ones**.)
+
+---
+#### Public IP Address Classes
+When an organization needs networking, it will need an **IP address class** according to its needs, which is based on **how many hosts** it has.
+
+| Class       | First Octet Address | Default Subnet Mask | Hosts                | Used for                                         |
+| ----------- | ------------------- | ------------------- | -------------------- | ------------------------------------------------ |
+| **Class A** | 1 - 126             | 255.0.0.0           | Up to **16 million** | Organizations with a **very large** amount of hosts |
+| **Class B** | 128 - 191           | 255.255.0.0         | Up to **65,000**     | **Medium to large** organizations                |
+| **Class C** | 192 - 223           | 255.255.255.0       | **254**              | **Small** organizations and homes that don't have a lot of hosts |
+
+> [!TIP]
+> **Example**
+>
+> An example of an organization that would need a Class A address is an **internet service provider** like **DIGI**, because it needs to distribute **millions of public IP addresses** to all its customers.
+
+---
+#### Subnetting
+
+##### Why does an IP address have a network and a host part?
+> [!IMPORTANT]
+> Why can't an IP address have just a host part, to uniquely assign each device an IP address?
+
+The reason is **manageability**: breaking down a large network into smaller networks, or **subnetworks**, which is known as **subnetting**.
+
+**The problem: one huge network**
+- Let's say there were no small networks, and an organization has a large number of computers in **one huge network**.
+- When a computer wants to talk to another computer, it needs to know how and where to reach that computer. It does this by using a **broadcast** to locate that computer.
+
+![](images/why_does_an_ip_address_have_a_network_and_a_host_part.png)
+
+- The problem is that when a computer sends out a broadcast on the network, asking the target computer to identify itself so they can communicate, **every computer on this network also receives the broadcast**, because they are all on the same network.
+- If every computer on this large network were broadcasting to every other computer just to communicate, it would **slow down the network** and potentially **bring it to a halt** because of the tremendous amount of **broadcast traffic** it would cause.
+
+**The solution: smaller networks separated by routers**
+1. To prevent this, the network needs to be **broken down into smaller networks**.
+2. The networks are broken down and **physically separated by routers**. This alleviates the problem of excessive traffic, because **broadcasts do not go past routers**.
+
+![](images/why_does_an_ip_address_have_a_network_and_a_host_part_2.png)
+
+- After subnetting, if two computers in two different subnets want to communicate, the computer sends out a broadcast that **only the computers in its own subnetwork** can receive.
+- Since the target computer is on a different subnetwork, the data is sent to the **default gateway**, which is the **router**, and the router then intelligently **routes the data to the destination**.
+
+> [!NOTE]
+> This is why IP addresses have a **network** and a **host** part: so networks can be **logically broken down into smaller networks**, which is known as **subnetting**.
+
+##### How subnetting works
+Subnetting is done by **changing the default subnet mask**, **borrowing some of the bits from the host portion**.
+
+> [!NOTE]
+> **Usable hosts**
+>
+> The subnet mask **255.255.255.0** gives us **one network with 256 hosts**. Technically, we have to **subtract two hosts**, because the values that are **all ones** and **all zeros** are reserved for the **broadcast** and **network** address respectively. So we actually have **254 usable hosts**.
+
+###### Borrowing 1 bit → 2 subnets
+For example, we borrow **one bit** from the host portion:
+
+255.255.255.0 ↔ 11111111.11111111.11111111.<ins>0</ins>0000000
+becomes:
+**255.255.255.128** ↔ 11111111.11111111.11111111.<ins>1</ins>0000000
+
+By borrowing one bit, the network is **divided in half**. Instead of having one network with 254 hosts, we get **two networks (subnets) with 126 hosts each**, because a bit can hold two values, 0 or 1, and each value is a different network.
+
+| Borrowed bit in the last octet | Host addresses range         | Subnet               |
+| ------------------------------ | ---------------------------- | -------------------- |
+| **0**                          | 192.168.1.0 to 192.168.1.127   | **192.168.1.0/25**   |
+| **1**                          | 192.168.1.128 to 192.168.1.255 | **192.168.1.128/25** |
+
+###### Borrowing 2 bits → 4 subnets
+If we borrow **another bit** from the host portion, the network is divided even further, giving us **four subnets with 62 hosts each**.
+
+255.255.255.128 ↔ 11111111.11111111.11111111.1<ins>0</ins>0000000
+becomes:
+**255.255.255.192** ↔ 11111111.11111111.11111111.1<ins>1</ins>0000000
+
+| First 2 bits in the last octet | Host addresses range           | Subnet               |
+| ------------------------------ | ------------------------------ | -------------------- |
+| **00**                         | 192.168.1.0 to 192.168.1.63    | **192.168.1.0/26**   |
+| **01**                         | 192.168.1.64 to 192.168.1.127  | **192.168.1.64/26**  |
+| **10**                         | 192.168.1.128 to 192.168.1.191 | **192.168.1.128/26** |
+| **11**                         | 192.168.1.192 to 192.168.1.255 | **192.168.1.192/26** |
+
+![](images/borrowing_2_bits_4_subnets.png)
 
 [↑ Back to top](#networking)
