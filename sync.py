@@ -25,6 +25,7 @@ GROUPS = {
     "Cabling & transmission": ["Transmission media & Transceivers"],
     "IP addressing": ["IPv4 Addressing", "Subnet Mask", "IPv6 Addressing"],
     "Modern networks": ["Modern Network Environments"],
+    "VLANs & switching": ["VLANS & Switch Technologies"],
 }
 
 CALLOUTS = {

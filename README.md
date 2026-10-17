@@ -82,6 +82,11 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [SSE (Security Service Edge)](#sse-security-service-edge)
   - [IaC (Infrastructure as Code)](#iac-infrastructure-as-code)
 
+**VLANs & switching**
+- [VLANS & Switch Technologies](#vlans--switch-technologies)
+  - [VLANs](#vlans)
+  - [Switch Technologies](#switch-technologies)
+
 ## Fundamentals
 
 ### Network Topologies and Types
@@ -1442,5 +1447,168 @@ Since transitioning to the cloud, **security needs to evolve** to incorporate th
 - Git is used to **manage the different versions** of scripts and acts as a **central repository**, providing a centralized location to store them.
 - Version control systems also **identify conflicts** in scripts, which happen when **multiple users are making changes** to the code.
 - It also supports **branching**: making a **copy of a codebase at a certain point in time**. This enables developers to work on experiments, bug fixes, and new features **without affecting the project's main version**.
+
+[↑ Back to top](#networking)
+
+## VLANs & switching
+
+### VLANS & Switch Technologies
+
+#### VLANs
+
+##### VLAN
+> [!NOTE]
+> **Definition**
+>
+> **VLAN** stands for **Virtual Local Area Network**. It is a local area network where computers, servers, and other network devices are **logically connected regardless of their physical location**.
+> Even if these devices are **scattered in different places**, it doesn't matter, because a VLAN can **logically group them into separate network segments**.
+
+**The purpose of a VLAN:**
+- **improved security**
+- **traffic management**
+- **a simplified network**
+
+> [!TIP]
+> **Example**
+>
+> There is a **3-story office building**, and in this building you have computers that belong to certain departments **mixed in** with computers that belong to **other departments** on the same floor.
+>
+> ![](images/vlan.png)
+>
+> - **Without VLANs:** all of these computers are connected to a switch, so the network **broadcast traffic** from the different departments is **mixed together**, and the departments all **see each other's network traffic**.
+> - **With VLANs:** to separate the broadcast traffic between the departments, you create **3 VLANs**: one for **accounting**, one for **shipping** and one for **support**. After that, each department **only sees its own network traffic**, even though all the computers are connected to the **same switch**.
+>
+> ![](images/vlan_2.png)
+
+**How VLANs are created:**
+- If the switch is **VLAN-capable**, VLANs can **logically create several virtual networks** to separate the network broadcast traffic.
+- VLANs are created by **designating specific ports on the switch** and **assigning those ports to a specific VLAN**.
+
+![](images/vlan_3.png)
+
+> [!NOTE]
+> Just to be clear, this **doesn't mean that computers can't communicate** with computers on **different VLANs**, because they can. Creating VLANs just means that their **broadcast traffic is kept within their own VLAN**.
+
+---
+##### VLAN 802.1Q tagging
+If you want to **connect VLANs together across different switches**, this is where **802.1Q tagging** comes in.
+
+> [!TIP]
+> **The scenario**
+>
+> 1. On **switch 1** we have two VLANs, tagged **VLAN 10** and **VLAN 20**.
+> 2. On **switch 2** we also have two VLANs, tagged **VLAN 10** and **VLAN 20**.
+>
+> We want the computers on **VLAN 10** on each switch to be able to communicate with each other, and the computers on **VLAN 20** on each switch to be able to communicate with each other.
+
+**How it's done: 802.1Q VLAN trunks**
+- A **VLAN trunk** allows **multiple VLANs** to communicate through a **single physical cable** between the switches.
+- To carry multiple VLANs over that link, the **port mode** needs to be changed from **access** to **trunk**.
+- The cable is connected to a **trunk port** on each switch, and it is on these trunk ports that the **tagging is configured**.
+- The frames coming from the computers are now **tagged**. These tags contain the **VLAN ID number**, which allows each switch to determine **which VLAN to send the frame to**.
+
+**Sending a frame from VLAN 10 on switch 1 to VLAN 10 on switch 2:**
+1. The frame is first sent to **switch 1**.
+2. Switch 1 sees that it's going to a **VLAN 10 device**, so it **tags the frame** with the VLAN ID: **VLAN 10**.
+3. Once the frame reaches the **trunk port on switch 2**, switch 2 **looks at the VLAN ID on the tag** and forwards the frame to the computer on **VLAN 10**.
+
+![](images/vlan_802_1q_tagging.png)
+
+---
+##### Native VLAN
+A **native VLAN** is a VLAN where **frames are untagged**. Its purpose is to let **older devices that don't support VLAN tagging** communicate over a **trunk link**.
+
+> [!TIP]
+> **Example**
+>
+> We've added **older computers on each switch**, and we want those older computers to be on the **same VLAN**.
+> 1. We configure the **port mode** of those computers' ports to **access** on each switch.
+> 2. For any device on the native VLAN, the **Ethernet frames will not be tagged**.
+> 3. When the trunk receives the frame, it notices that it's **untagged**, which means it's on the **native VLAN** we configured, so it sends the frame to **switch 2**.
+> 4. Switch 2 also notices that it's **untagged**, which means it's on the **native VLAN** we configured.
+
+![](images/native_vlan.png)
+
+---
+##### VXLAN
+**The limitations of VLANs:**
+1. VLANs only operate at **layer 2**, so they are **not routable**. This means VLANs **cannot be created across networks in different geographical locations**.
+2. VLANs support a **maximum of 4000 virtual networks**. This isn't a problem for most organizations, but for **large enterprise organizations** with data centers that use **cloud computing and virtual machines**, 4000 is **not enough**.
+
+This is where **VXLAN** comes in. **VXLAN** stands for **Virtual Extensible Local Area Network**.
+
+| | VLAN | VXLAN |
+| --- | --- | --- |
+| **Maximum virtual networks** | 4000 | **16 million** |
+| **Routable** | No (layer 2 only) | **Yes**: can create virtual networks across different geographical areas |
+
+**How VXLAN works:**
+- VXLANs use a **VNID** (**Virtual Network Identifier**, also written **VNI**), which is a **label or tag** used to **identify a specific virtual network**.
+- On each switch, we need to create and configure **VTEPs** (**VXLAN Tunnel Endpoints**). These endpoints are responsible for **encapsulating and decapsulating** the VXLAN frames that are sent and received through a **VXLAN tunnel**.
+
+> [!TIP]
+> **Example**
+>
+> We have **two data centers** in **two different geographical areas**, and we want them to be on the **same virtual network**, so we tag them both as **VNI 100**.
+> 1. When one data center sends a frame, the **VTEP encapsulates** that frame in a **VXLAN header**. This header includes the **VNI number**, which in this case is **VNI 100**.
+> 2. The frame is sent **over the internet**.
+> 3. The other switch **decapsulates** the frame and sends it to the other data center.
+>
+> The data centers **act as if they were on the same local network**, even though they are in different geographical areas.
+
+This is where we get the term **DCI** (**Data Center Interconnect**), which refers to a technology that **connects multiple data centers together** in a VXLAN.
+
+![](images/vxlan.png)
+
+---
+#### Switch Technologies
+
+##### Layer 3 switch
+- **Layer 2 switches** are by far the **most common** type of switch.
+- A **layer 3 switch** (**multilayer switch**) operates at **layer 3** of the [OSI Model](#osi-model).
+- Layer 3 is the **network layer**, which has to do with **routing** and deals with **IP addresses**. So a layer 3 switch can **route data using IP addresses**.
+- In addition to operating at layer 3, it can **still operate at layer 2**.
+
+So a layer 3 switch can:
+- **forward** data using **MAC addresses** (layer 2)
+- **route** data using **IP addresses** (layer 3)
+
+---
+##### Link aggregation
+A networking technique that uses **multiple cables connected to multiple ports** to create a **single logical connection**, which **increases the bandwidth** between the switches.
+
+![](images/link_aggregation.png)
+
+---
+##### Duplex
+###### Full duplex
+The term **duplex** in a network switch means that a device can **send and receive data in either direction at the same time**, which is also known as **full duplex**.
+- It is **faster** than half duplex and can **double the bandwidth**.
+
+![](images/full_duplex.png)
+
+###### Half duplex
+If a device can only send and receive data in **one direction at a time**, this is known as **half duplex**.
+
+![](images/half_duplex.png)
+
+---
+##### Interface speed
+- Switches have different **interface speed ratings**. The most common interface speeds are measured in **megabits per second**, such as **10, 100, 1000 or 10,000 Mbps**.
+- To take full advantage of a certain speed, **both connected interfaces** must be **capable of handling that speed**.
+
+> [!TIP]
+> **Example**
+>
+> If your device has an interface of **1000 Mbps**, but you plug it into a switch rated at only **100 Mbps**, you will only achieve **100 Mbps**. You need to plug your device into a **1000 Mbps switch** to get the maximum speed possible.
+
+- A lot of switches have a feature called **auto-negotiation**, a protocol that **automatically determines the best settings** (**speed and duplex mode**) for both devices.
+
+---
+##### Maximum transmission unit
+- The **MTU** (**Maximum Transmission Unit**) is the **biggest size of a data packet** that a network device, such as a switch, can accept. It is measured in **bytes**.
+- The MTU size for Ethernet is **1500 bytes** by default.
+- Frames bigger than 1500 bytes are called **jumbo frames**. These are typically **9000 bytes** in size.
+- Jumbo frames are **not typically used on the internet or in homes**. They are typically used in **high-speed internal networks** for **moving large amounts of data**. These high-speed networks use **gigabit** or even **10 gigabit** switches.
 
 [↑ Back to top](#networking)
