@@ -23,7 +23,7 @@ GROUPS = {
     "Cloud & virtualization": ["Virtualization", "VPC", "Cloud"],
     "Ports & protocols": ["Ports, Protocols, Services & Traffic Types"],
     "Cabling & transmission": ["Transmission media & Transceivers"],
-    "IP addressing": ["IPv4 Addressing", "Subnet Mask"],
+    "IP addressing": ["IPv4 Addressing", "Subnet Mask", "IPv6 Addressing"],
     "Modern networks": ["Modern Network Environments"],
 }
 
@@ -144,7 +144,8 @@ def convert(title, body, notes, files, anchors, used_images, used_html):
             if src is None:
                 return label
             if src.suffix.lower() in IMAGE_EXTS:
-                if src.name.startswith("Pasted image"):
+                # Unnamed images ("Pasted image ...", "image 1.jpg") are named after their section
+                if src.name.startswith("Pasted image") or re.fullmatch(r"image[\d\s()]*", src.stem):
                     base = file_slug(re.sub(r"[*`]", "", heading))
                 else:
                     base = file_slug(src.stem)

@@ -69,6 +69,9 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [CIDR](#cidr)
   - [Public IP Address Classes](#public-ip-address-classes)
   - [Subnetting](#subnetting)
+- [IPv6 Addressing](#ipv6-addressing)
+  - [IPv6 compression](#ipv6-compression)
+  - [Migrating from IPv4 to IPv6](#migrating-from-ipv4-to-ipv6)
 
 **Modern networks**
 - [Modern Network Environments](#modern-network-environments)
@@ -952,7 +955,7 @@ The service that converts (translates) a private IP address into a public IP add
 	- **private → public**
 	- **public → private**: if a computer on the internet wants to communicate with a computer on this private network, NAT needs to translate the public IP address to the private IP address of that computer.
 
-![](images/image.jpg)
+![](images/nat.jpg)
 
 ##### PAT
 **PAT** (**Port Address Translation**) is an **extension of NAT**.
@@ -1164,6 +1167,102 @@ becomes:
 
 [↑ Back to top](#networking)
 
+---
+
+### IPv6 Addressing
+
+> [!WARNING]
+> **Why IPv6?**
+>
+> When the internet was first developed, programmers didn't realize how big it would become. They thought that **IPv4**, which produced **over 4 billion IP addresses**, would be enough. But they were obviously wrong.
+
+**IPv6** (IP version 6) is the **next generation of IP addresses**.
+The main difference between IPv4 and IPv6 is the **length of the address**:
+
+| | IPv4 | IPv6 |
+| --- | --- | --- |
+| **Length** | **32-bit** | **128-bit** |
+| **Format** | Numeric | **Hexadecimal** (uses both **numbers and letters**) |
+| **Number of addresses** | Over **4 billion** | An unbelievable **340 undecillion** |
+
+---
+#### IPv6 compression
+An example of an IPv6 address:
+`2601:b589:0000:4b01:0000:0000:bb81:0712`
+
+It is a very long IP address, but there is a method in IPv6 that can be used to **compress the address** and make it **easier to read**.
+
+An IPv6 address has **8 groups of hexadecimals**, known as **hextets**. To compress it:
+1. **Leading 0s:** if there are 0s at the start of a group (reading from left to right), those 0s **can be omitted**, except for the **last digit** in the group.
+2. **Consecutive all-0 groups:** if there are **2 or more consecutive groups of all 0s**, they can be replaced with a **double colon (`::`)**.
+
+> [!TIP]
+> **Example**
+>
+> | Full address | Compressed |
+> | --- | --- |
+> | `2601:b589:0000:4b01:0000:0000:bb81:0712` | `2601:b589:0:4b01::bb81:712` |
+> | `2002:0c3e:0000:4b01:0000:0000:0000:0002` | `2002:c3e:0:4b01::2` |
+
+---
+#### Migrating from IPv4 to IPv6
+- IPv4 was the first version of IP addresses, but we have **officially run out of them**, so ISPs are **not giving out new ones**.
+- Because of this, we are now **migrating to IPv6**, but we haven't fully migrated, because a lot of organizations are **still using the older IPv4**.
+- So today we are using a **mixture of IPv4 and IPv6**, and we need **transition technologies** to enable communication between them.
+
+##### Tunneling
+**Tunneling** is when **IPv6 packets are enclosed into IPv4 packets**, so routing can be accomplished between the two IP versions.
+
+> [!TIP]
+> **How tunneling works**
+>
+> Your network has IPv6 devices and wants to talk with another network that also has IPv6 devices.
+> 1. When the packet crosses the internet to reach the other network, it may encounter an **IPv4-only segment** in the **ISP's network**.
+> 2. Your router (the **tunnel start**) **encapsulates the whole IPv6 packet inside an IPv4 packet**, using **its own IPv4 address as the source** and the **other site's router IPv4 address as the destination**.
+> 3. The ISP forwards it like **any normal IPv4 packet**, **without ever seeing the IPv6 packet inside**.
+> 4. When it reaches the router of the other network (the **tunnel end**), the IPv4 header is removed (**decapsulation**) and the original IPv6 packet is forwarded to the destination device, **unchanged**.
+
+![](images/tunneling.png)
+
+##### Dual Stack
+**Dual stack** is another transition technology that allows your device to **process IPv4 and IPv6 data simultaneously**, so you won't have any **compatibility issues** when accessing websites and servers during the migration.
+
+> [!TIP]
+> **Example**
+>
+> This is why, if you type the `ipconfig` command, you will see that your computer has **both an IPv6 and an IPv4 address**: it's a result of having dual stack installed on your computer.
+
+![](images/dual_stack.jpg)
+
+##### NAT64
+**NAT64** is another transition technology.
+- While dual stack allows devices to run both IPv4 and IPv6 simultaneously, NAT64 is used on **IPv6-only devices**.
+- It **translates** traffic from **IPv6-only devices** so they can communicate with **IPv4-only servers**.
+
+> [!TIP]
+> **How NAT64 works**
+>
+> - A device has an **IPv6 address**, for example: `2001:db8:1::10`
+> - It wants to send a packet to a server that has an **IPv4 address**, for example: `192.0.2.33`
+> - The device uses the standard prefix **`64:ff9b::/96`**, an address range **reserved for NAT64**.
+>
+> 1. The device sends the packet to `64:ff9b::192.0.2.33`, which goes to the **NAT64 gateway**.
+> 2. The gateway **reads the last part**, sees `192.0.2.33`, and sends the packet to that **IPv4 server**.
+> 3. The reply comes back to the gateway, which **wraps it in IPv6 again** and sends it to the device.
+
+![](images/nat64.jpg)
+
+> [!NOTE]
+> **Transition technologies**
+>
+> | Technology | What it does |
+> | --- | --- |
+> | **Tunneling** | Encloses IPv6 packets into IPv4 packets so they can cross IPv4-only networks |
+> | **Dual stack** | Lets a device process IPv4 and IPv6 simultaneously |
+> | **NAT64** | Translates for IPv6-only devices so they can reach IPv4-only servers |
+
+[↑ Back to top](#networking)
+
 ## Modern networks
 
 ### Modern Network Environments
@@ -1176,14 +1275,14 @@ becomes:
 
 ##### The two layers of a network device
 In a traditional network you have **switches and routers**, and these devices have two different layers:
-1. **Control layer:** the **"manager"**. It decides how traffic should move through the network based on **policies and configurations**, and sends those rules to the network devices.
-2. **Data layer:** the **physical network hardware**: switches, routers and the cables connecting them.
+1. **Control plane:** the **"manager"**. It decides how traffic should move through the network based on **policies and configurations**, and sends those rules to the network devices.
+2. **Data plane:** the **physical network hardware**: switches, routers and the cables connecting them.
 	- Using **specialized chips**, these devices receive packets, look them up in their **flow tables**, and forward them out the correct port at **very high speed**.
-	- They **don't make decisions**; they just move packets through the network, following the rules set by the control layer.
+	- They **don't make decisions**; they just move packets through the network, following the rules set by the control plane.
 
 ##### Traditional network vs. SDN
-- **Traditional network:** when routers and switches receive data, they refer to **their own control layer** (such as routing and switching tables) and, based on their configuration, **decide themselves** how and where the data is sent.
-- **SDN:** the control layer is **taken away from the individual routers and switches** and is instead managed by **software in a centralized location**.
+- **Traditional network:** when routers and switches receive data, they refer to **their own control plane** (such as routing and switching tables) and, based on their configuration, **decide themselves** how and where the data is sent.
+- **SDN:** the control plane is **taken away from the individual routers and switches** and is instead managed by **software in a centralized location**.
 
 ![](images/traditional_network_vs_sdn.png)
 
@@ -1310,7 +1409,7 @@ Since transitioning to the cloud, **security needs to evolve** to incorporate th
 2. Those scripts are **uploaded to the cloud**.
 3. The cloud **builds and configures the network automatically** using those scripts.
 
-![](images/image_1.jpg)
+![](images/traditional_way_vs_iac.jpg)
 
 ##### Benefits
 - **Fast deployment:** instead of manually setting up a network, the network is built and configured automatically by scripts.
