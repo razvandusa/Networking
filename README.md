@@ -66,6 +66,15 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [Public IP Address Classes](#public-ip-address-classes)
   - [Subnetting](#subnetting)
 
+**Modern networks**
+- [Modern Network Environments](#modern-network-environments)
+  - [SDN (Software-Defined Network)](#sdn-software-defined-network)
+  - [SD-WAN (Software-Defined WAN)](#sd-wan-software-defined-wan)
+  - [ZTA (Zero Trust Architecture)](#zta-zero-trust-architecture)
+  - [SASE (Secure Access Service Edge)](#sase-secure-access-service-edge)
+  - [SSE (Security Service Edge)](#sse-security-service-edge)
+  - [IaC (Infrastructure as Code)](#iac-infrastructure-as-code)
+
 ## Fundamentals
 
 ### Network Topologies and Types
@@ -394,7 +403,7 @@ Let's say the business wants to create separate networks in its VPC by creating 
 ---
 
 #### Cloud deployment models
-When a company is ready to deploy a cloud, that company must decide what type of **cloud deployment model** it wants to use.
+When a company is ready to deploy a cloud, that company must decide what type of **cloud deployment model** it wants to use. The **deployment model** is about infrastructure isolation, while who’s allowed to log in is an access policy.
 
 1. **Public model**
    - Is when a company is going to offer their product or service accessible to **anyone** who wants to access it.
@@ -1063,5 +1072,187 @@ becomes:
 | **11**                         | 192.168.1.192 to 192.168.1.255 | **192.168.1.192/26** |
 
 ![](images/borrowing_2_bits_4_subnets.png)
+
+[↑ Back to top](#networking)
+
+## Modern networks
+
+### Modern Network Environments
+
+#### SDN (Software-Defined Network)
+> [!NOTE]
+> **Definition**
+>
+> **SDN** is a system where the network is managed by administrators from a **centralized software system**, rather than having each individual device make decisions itself.
+
+##### The two layers of a network device
+In a traditional network you have **switches and routers**, and these devices have two different layers:
+1. **Control layer:** the **"manager"**. It decides how traffic should move through the network based on **policies and configurations**, and sends those rules to the network devices.
+2. **Data layer:** the **physical network hardware**: switches, routers and the cables connecting them.
+	- Using **specialized chips**, these devices receive packets, look them up in their **flow tables**, and forward them out the correct port at **very high speed**.
+	- They **don't make decisions**; they just move packets through the network, following the rules set by the control layer.
+
+##### Traditional network vs. SDN
+- **Traditional network:** when routers and switches receive data, they refer to **their own control layer** (such as routing and switching tables) and, based on their configuration, **decide themselves** how and where the data is sent.
+- **SDN:** the control layer is **taken away from the individual routers and switches** and is instead managed by **software in a centralized location**.
+
+![](images/traditional_network_vs_sdn.png)
+
+##### Benefits
+An SDN allows network administrators to **manage and configure all the traffic** in a network. This has several benefits:
+- **prioritizing traffic** and **load balancing** when needed
+- **easy scalability**, to scale up or down when needed
+- **improved network performance**
+- **greater security** using **segmentation and isolation**
+
+---
+#### SD-WAN (Software-Defined WAN)
+A **WAN** is any network that **connects separate LANs over long distances**. The **internet** is the biggest example of a WAN.
+
+##### Traditional WAN and MPLS
+Imagine your company needs to send traffic between **two offices** in two different geographical locations.
+- You could send the traffic over the **regular internet**, but that is **risky** if you send any sensitive information, and the traffic might **get stuck during rush hours**.
+- Instead, you pay a **telecom provider** to give you a **private, reserved connection line** between your offices.
+- **MPLS** (**Multiprotocol Label Switching**) is the technology the provider uses to build and manage that private connection efficiently.
+
+> [!TIP]
+> **How MPLS works**
+>
+> - **Normally:** every router along the way has to open up each packet, look at the **destination IP address**, and figure out where to send it next. That takes a bit of **processing time at every single hop**.
+> - **With MPLS:** the **entry router** does that lookup **once** and slaps a small **label** on the packet, like a sorting tag. Every router after that just **reads the tag and forwards it**, without re-examining the whole packet.
+> - **Result:** it's **quicker**, and the provider can **guarantee** your traffic takes a **specific, consistent path**, with **consistent speed**.
+
+**The problem with a traditional WAN**
+Let's say your company has **five offices**. With a traditional WAN:
+- Each office gets **one connection**, an MPLS line, and that is the **only path** to the rest of the company.
+- If that line **goes down or gets congested**, that office is **stuck**.
+- If you want to change anything, like adding a new office or changing how traffic is prioritized, someone has to **manually configure each router at each site**.
+- It is **slow and rigid**.
+
+##### How SD-WAN improves on it
+A **software-defined WAN** is an **extension of SDN**. Long-distance networks can be created and managed **more effectively** with SD-WAN.
+
+The main difference between SD-WAN and a regular WAN is that SD-WAN is **software-defined**:
+- You can use **multiple links at the same office at once** (for example **MPLS, broadband, and 5G**) instead of depending on a single one.
+- A **central controller** monitors the quality of each link and **automatically sends each type of traffic over the best one**, such as video calls over MPLS and large file backups over cheaper broadband.
+- If a link **fails or gets congested**, traffic is **rerouted automatically**.
+- **Policies are set once in a central dashboard** and pushed to every office, so adding a new office or changing priorities no longer means configuring each router by hand.
+
+| | Traditional WAN | SD-WAN |
+| --- | --- | --- |
+| **Links per office** | One (MPLS line) | Multiple at once (MPLS, broadband, 5G) |
+| **Link fails / congested** | Office is stuck | Traffic rerouted automatically |
+| **Making changes** | Configure each router manually at each site | Set once in a central dashboard, pushed to every office |
+
+> [!NOTE]
+> You **still rent the physical links** from providers (an ISP, a mobile carrier, a telecom). SD-WAN is the **software layer on top** that manages them.
+> The management of the network (policies, configurations, and the flow of data) is all done through a **central policy management system** (like Cisco or Fortinet) using a **centralized controller**.
+
+![](images/how_sd_wan_improves_on_it.png)
+
+##### Zero-Touch Provisioning
+SD-WAN has a feature called **zero-touch provisioning** that **configures new network devices automatically**, without any manual intervention.
+- It automates the process of **installing software**, **configuring settings**, and **enrolling devices** in an SDN/SD-WAN.
+- This results in **faster deployment** of new devices.
+
+##### Transport Agnostic
+SD-WAN is also **transport agnostic**, which means it'll **work with just about anything**.
+- When SD-WAN is implemented, it can make effective use of the **underlying physical network infrastructure regardless of what it is**: broadband internet, 5G, satellite, MPLS, etc.
+
+![](images/transport_agnostic.png)
+
+---
+#### ZTA (Zero Trust Architecture)
+> [!NOTE]
+> **Definition**
+>
+> **Zero trust architecture (ZTA)** is a security framework that assumes that **no user, device, or application**, **even those located inside a network**, should be completely trusted.
+
+- With **traditional security**, once users log into a system they can often be trusted and verified for a period of time **without requiring extra verification**. With ZTA, this is **no longer the case**.
+- ZTA follows a **"never trust, always verify"** guideline.
+- It uses **policy-based authentication** before access is granted, based on the user's:
+	- **identity**
+	- **time and date** they log in
+	- **location**
+	- **behaviour**
+- It requires users and devices to be **continuously verified** as part of its authentication.
+- When users are granted access, they are given **least privilege access**, which only grants them the **minimal access needed to do their job**.
+
+So zero trust architecture provides the **highest security framework** to verify someone's identity.
+
+![](images/zta_zero_trust_architecture.png)
+
+---
+#### SASE (Secure Access Service Edge)
+The way organizations do business has changed in the past 20 years: they've moved from **hosting their own applications and servers on premises** to **using cloud infrastructure** instead.
+Since transitioning to the cloud, **security needs to evolve** to incorporate the cloud as well. This is where **SASE** (**Secure Access Service Edge**) comes in.
+
+- SASE provides a better and safer way to **access data and applications** by **integrating networking and security into the cloud infrastructure**.
+- SASE includes different technologies:
+	- **Zero trust network access**
+	- **Secure web gateways**
+	- **SD-WAN**
+	- **VPNs**
+- SASE is also referred to as the **"next-generation VPN"**, because it provides a **more thorough and more secure** method of cloud communication and remote access.
+
+![](images/sase_secure_access_service_edge.png)
+
+---
+#### SSE (Security Service Edge)
+**SSE** (**Security Service Edge**) is another **cloud security solution**.
+- It aims to **secure access to websites, cloud services, and private apps**, **no matter the user's location or device**.
+- It is frequently a **component of a broader SASE architecture**, in which **WAN edge services** control **network connectivity** and **SSE** manages the **security**.
+
+![](images/sse_security_service_edge.png)
+
+---
+#### IaC (Infrastructure as Code)
+> [!NOTE]
+> **Definition**
+>
+> **IaC** is a way of **setting up and managing the infrastructure of a cloud network** by using a **script**.
+
+##### Traditional way vs. IaC
+- **Traditional way:** setting up a network in the cloud is done **manually**. For example, administrators would log into the cloud provider's dashboard and click through menus to set up and configure virtual machines, load balancers, firewalls and databases, install and configure software, and manage that network.
+- **IaC:** this is done **automatically** by writing **code or a script**.
+
+**How it works:**
+1. Instead of manually setting up a network, administrators get together and **write scripts** that **design, build, and configure** the network they want.
+2. Those scripts are **uploaded to the cloud**.
+3. The cloud **builds and configures the network automatically** using those scripts.
+
+![](images/image_1.jpg)
+
+##### Benefits
+- **Fast deployment:** instead of manually setting up a network, the network is built and configured automatically by scripts.
+- **Reliable and consistent:** it **eliminates human error**.
+- **Saves money:** it doesn't require a large staff to build and manage a network.
+
+##### Key concepts
+**Playbook**
+- A structured document used in IT that offers a **collection of procedures** for managing different scenarios, including complicated operations, common IT tasks, and security issues.
+
+**Template**
+- A **reusable file** used in IaC that specifies the **ideal configuration** of your cloud infrastructure, such as servers, databases, and networks.
+- By automating the distribution and administration of these resources, templates provide **scalability**, **consistency**, and **reduce human error**.
+
+**Configuration drift**
+- Since IaC uses code, it also **prevents configuration drift**.
+- **Configuration drift** is a **deviation from the network's baseline configuration** caused by **manual configurations and human error**.
+
+> [!TIP]
+> **Example**
+>
+> Two servers were supposed to be identical, but because of configuration drift they slowly become **different from each other over time**.
+
+**Upgrades**
+- Whenever an upgrade is needed, a **new script version** is written with the new upgrade instructions.
+- The whole file is then uploaded to the cloud, and the **whole network is recreated** with the new upgrades.
+
+**Source control**
+- Source control in IaC refers to **tracking the changes to IaC scripts** using a **version control system** such as **Git**.
+- Git is used to **manage the different versions** of scripts and acts as a **central repository**, providing a centralized location to store them.
+- Version control systems also **identify conflicts** in scripts, which happen when **multiple users are making changes** to the code.
+- It also supports **branching**: making a **copy of a codebase at a certain point in time**. This enables developers to work on experiments, bug fixes, and new features **without affecting the project's main version**.
 
 [↑ Back to top](#networking)

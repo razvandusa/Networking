@@ -24,6 +24,7 @@ GROUPS = {
     "Ports & protocols": ["Ports, Protocols, Services & Traffic Types"],
     "Cabling & transmission": ["Transmission media & Transceivers"],
     "IP addressing": ["IPv4 Addressing", "Subnet Mask"],
+    "Modern networks": ["Modern Network Environments"],
 }
 
 CALLOUTS = {
