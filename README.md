@@ -87,6 +87,12 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [VLANs](#vlans)
   - [Switch Technologies](#switch-technologies)
 
+**Routing**
+- [Routing Technologies](#routing-technologies)
+  - [Routers and routing tables](#routers-and-routing-tables)
+  - [Populating the routing tables](#populating-the-routing-tables)
+  - [Route Selection](#route-selection)
+
 ## Fundamentals
 
 ### Network Topologies and Types
@@ -1503,8 +1509,7 @@ If you want to **connect VLANs together across different switches**, this is whe
 
 **How it's done: 802.1Q VLAN trunks**
 - A **VLAN trunk** allows **multiple VLANs** to communicate through a **single physical cable** between the switches.
-- To carry multiple VLANs over that link, the **port mode** needs to be changed from **access** to **trunk**.
-- The cable is connected to a **trunk port** on each switch, and it is on these trunk ports that the **tagging is configured**.
+- To carry multiple VLANs over that link, the **port mode** needs to be changed from **access** to **trunk** and a cable needs to be connected to a **trunk port** on each switch, and it is on these trunk ports that the **tagging is configured**.
 - The frames coming from the computers are now **tagged**. These tags contain the **VLAN ID number**, which allows each switch to determine **which VLAN to send the frame to**.
 
 **Sending a frame from VLAN 10 on switch 1 to VLAN 10 on switch 2:**
@@ -1522,10 +1527,9 @@ A **native VLAN** is a VLAN where **frames are untagged**. Its purpose is to let
 > **Example**
 >
 > We've added **older computers on each switch**, and we want those older computers to be on the **same VLAN**.
-> 1. We configure the **port mode** of those computers' ports to **access** on each switch.
-> 2. For any device on the native VLAN, the **Ethernet frames will not be tagged**.
-> 3. When the trunk receives the frame, it notices that it's **untagged**, which means it's on the **native VLAN** we configured, so it sends the frame to **switch 2**.
-> 4. Switch 2 also notices that it's **untagged**, which means it's on the **native VLAN** we configured.
+> 1. For any device on the native VLAN, the **Ethernet frames will not be tagged**.
+> 2. When the trunk receives the frame, it notices that it's **untagged**, which means it's on the **native VLAN** we configured, so it sends the frame to **switch 2**.
+> 3. Switch 2 also notices that it's **untagged**, which means it's on the **native VLAN** we configured.
 
 ![](images/native_vlan.png)
 
@@ -1610,5 +1614,142 @@ If a device can only send and receive data in **one direction at a time**, this 
 - The MTU size for Ethernet is **1500 bytes** by default.
 - Frames bigger than 1500 bytes are called **jumbo frames**. These are typically **9000 bytes** in size.
 - Jumbo frames are **not typically used on the internet or in homes**. They are typically used in **high-speed internal networks** for **moving large amounts of data**. These high-speed networks use **gigabit** or even **10 gigabit** switches.
+
+[↑ Back to top](#networking)
+
+## Routing
+
+### Routing Technologies
+
+#### Routers and routing tables
+The internet is a **giant highway of pathways** for data to travel to reach its destination.
+In between these pathways are devices called **routers**. Just like their name says, routers **route data** on the internet so it can reach its **intended destination**.
+
+![](images/routers_and_routing_tables.png)
+
+Routers route data by using **routing tables**.
+
+> [!NOTE]
+> **Definition**
+>
+> A **routing table** is a file that contains a **set of rules** showing **what path a data packet takes** to its destination.
+
+As a data packet arrives at the router, the router **looks at its routing table** to find out where to forward the packet along the **best path** to its destination.
+
+![](images/routers_and_routing_tables_2.png)
+
+---
+#### Populating the routing tables
+Routing tables are populated in **three ways**:
+
+| Type | How the route is entered | Used for |
+| --- | --- | --- |
+| **Directly connected** | **Automatically** by the router | Networks **directly connected** to a router's interface |
+| **Static** | **Manually** by a network administrator | Networks **not directly connected** to a router's interface |
+| **Dynamic** | **Automatically** by **neighboring routers**, using dynamic routing protocols | — |
+
+##### Directly connected
+- Directly connected routes show the routes for the networks that are **directly connected to a router's interface**.
+- These routes are **automatically created** by the router as soon as its interfaces are configured with an **IP address and subnet mask**.
+
+![](images/directly_connected.png)
+![](images/directly_connected_2.png)
+
+##### Static routes
+- Static routes are **entered manually** by a **network administrator**.
+- These routes are necessary to access networks that are **not directly connected** to a router's interface.
+
+![](images/static_routes.jpg)
+
+##### Dynamic routes
+- Dynamic routes are similar to static routes; the difference is **how the routes are entered** into a routing table.
+- Where static routes are entered **manually**, dynamic routes are entered **automatically by neighboring routers** using one or more **dynamic routing protocols**.
+- These dynamic routing protocols are **RIP**, **OSPF**, **BGP** and **EIGRP**.
+
+###### RIP & RIPv2
+- The **oldest** routing protocol is called **RIP** (**Routing Information Protocol**).
+- Routers that use RIP **broadcast the routing information** to other routers **every 30 seconds**, regardless of whether the routing information has changed or not.
+- As networks got bigger, this caused a lot of **unnecessary traffic** on the network.
+- This is why **RIP version 2** was created: it **solved the problem of excessive broadcast traffic** that RIP version 1 caused.
+
+![](images/rip_ripv2.png)
+
+###### OSPF
+**OSPF** stands for **Open Shortest Path First**. It is a routing protocol that uses the **shortest path first algorithm**, which is used to determine the **least-cost path**, in other words the **most efficient route** for data packets to take to their destination.
+
+**Key terms:**
+- **LSA:** the **basic unit of information** in OSPF, a small record in which a router **describes one piece of the network**.
+- **LSDB** (**Link State Database**): the **collection of all the LSAs** a router has received for an area.
+
+**How does OSPF work under the hood?**
+1. Routers send **OSPF packets** out **every 10 seconds**. Two routers become **neighbors** if their **parameters match**, for example the **area ID**.
+2. Neighbors **exchange summaries** of what they know, **request what they're missing**, and end up with **identical link-state databases**.
+3. Whenever a link **goes up, goes down or changes cost**, the router originates a **new version of its router LSA** with a **higher sequence number** and **floods it** to its neighbors.
+4. Every router that installs a changed LSA **reruns Dijkstra (SPF)** on its own copy of the **LSDB**.
+
+![](images/ospf.png)
+
+###### BGP
+**BGP** stands for **Border Gateway Protocol**, and it is the **standard routing protocol of the internet**.
+- It connects **autonomous systems (ASes)**: networks run by **one organization** (an ISP, a cloud provider, a university) under a **single routing policy**, each identified by an **AS number (ASN)**.
+- It determines routing directions based on **paths and policies**, and it's the **language used when different networks on the internet want to communicate**.
+- BGP is a **distance vector** routing protocol, which means it factors the **distance to the destination** based on **how many hops**.
+	- A **hop** refers to how many **routers** a data packet has to go through to reach its destination.
+
+###### Hybrid (EIGRP)
+Another type of routing protocol is a **hybrid**. In this case, we're talking about **EIGRP**, which stands for **Enhanced Interior Gateway Routing Protocol**.
+- It is a **combination of distance vector and link state** protocols, and it runs on **Cisco routers**.
+- It uses the **Diffusing Update Algorithm**, known as **DUAL**, to find the **best path** to the destination.
+- It is **fast**.
+- It has **less overhead**.
+- It can **support many network layer protocols**.
+
+> [!NOTE]
+> **Dynamic routing protocols**
+>
+> | Protocol | Full name | Key point |
+> | --- | --- | --- |
+> | **RIP / RIPv2** | Routing Information Protocol | Oldest; RIP broadcasts every 30 seconds, RIPv2 solved the excessive traffic |
+> | **OSPF** | Open Shortest Path First | Shortest path first algorithm: least-cost path |
+> | **BGP** | Border Gateway Protocol | Standard routing protocol of the internet; connects autonomous systems |
+> | **EIGRP** | Enhanced Interior Gateway Routing Protocol | Hybrid, Cisco routers, uses DUAL |
+
+---
+#### Route Selection
+**Route selection** is the process by which a router **chooses the best path** to forward data packets to their destination. The selection is based on different factors, including:
+- the **destination address**
+- the **routes available** in the router's routing table
+- the **rules and protocols** used by the router
+
+Here is an entry in a routing table, showing its different fields:
+
+![](images/route_selection.png)
+
+A route is selected in **three ways**:
+
+##### 1. Prefix length
+- The **prefix length** in IPv4 is the **bit count in the network part** of an IP address.
+- It shows **how many bits are used to identify the network portion**, which refers to the **subnet mask**.
+- When there are **numerous routes that match** a destination IP address, the prefix length is very important in deciding which route to choose.
+- Routers use the **longest prefix match** algorithm: they give priority to routes with the **longest prefix that still matches** the destination IP address.
+- This makes sure that **more specific routes** are chosen over **less specific** ones.
+
+> [!TIP]
+> **Example**
+>
+> A router looks at an incoming data packet and sees the destination IP address **192.168.0.1**. The router looks at its routing table to see where to forward the packet, and there is **more than one matching entry** (shown below).
+> Both entries will work, but the router chooses the one with the **longer prefix length**, in other words the **more specific** one, to send the packet.
+
+![](images/1_prefix_length.png)
+
+##### 2. Administrative distance
+- The router uses **administrative distance** to decide which route to take if there is **more than one route to the same location** in the routing table, such as a **tie**.
+- The administrative distance is a **number given to each route** to show **how reliable and trustworthy** it is.
+- **The lower the number, the higher the priority.**
+
+##### 3. Metric
+- A **metric** is a **numerical value** given to a path that indicates the **cost or preference** of choosing that particular path.
+- The main purpose of a routing metric is to **rank routes** and choose the **best way** to send network data.
+- **The lower the metric, the higher the preference** for choosing that route.
 
 [↑ Back to top](#networking)

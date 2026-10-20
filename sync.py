@@ -26,6 +26,7 @@ GROUPS = {
     "IP addressing": ["IPv4 Addressing", "Subnet Mask", "IPv6 Addressing"],
     "Modern networks": ["Modern Network Environments"],
     "VLANs & switching": ["VLANS & Switch Technologies"],
+    "Routing": ["Routing Technologies"],
 }
 
 CALLOUTS = {
