@@ -52,7 +52,7 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
 
 **Cabling & transmission**
 - [Transmission media & Transceivers](#transmission-media--transceivers)
-  - [Wireless](#wireless)
+  - [Wireless](#wireless-1)
   - [Wired](#wired)
   - [Connectors](#connectors)
 
@@ -92,6 +92,39 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [Routers and routing tables](#routers-and-routing-tables)
   - [Populating the routing tables](#populating-the-routing-tables)
   - [Route Selection](#route-selection)
+
+**Wireless**
+- [Wireless Devices & Technologies](#wireless-devices--technologies)
+  - [Frequency Bands](#frequency-bands)
+  - [Wi-Fi Channels](#wi-fi-channels)
+  - [802.11h](#80211h)
+  - [Band Steering](#band-steering)
+  - [Network Identifiers](#network-identifiers)
+  - [Wireless Network Types](#wireless-network-types)
+  - [Wi-Fi Encryption](#wi-fi-encryption)
+  - [Authentication](#authentication)
+  - [Guest Network](#guest-network)
+  - [Captive Portal](#captive-portal)
+  - [Antennas](#antennas)
+  - [Access Points](#access-points)
+
+**Physical installations**
+- [Factors of Physical Installations](#factors-of-physical-installations)
+  - [Equipment & Power](#equipment--power)
+  - [Cabling & Distribution](#cabling--distribution)
+  - [Environment](#environment)
+
+**Processes & procedures**
+- [Purpose Of Organizational Processes & Procedures](#purpose-of-organizational-processes--procedures)
+  - [Diagrams](#diagrams)
+  - [Asset & Resource Management](#asset--resource-management)
+  - [Life-Cycle Management](#life-cycle-management)
+  - [Change & Configuration Management](#change--configuration-management)
+
+**Network monitoring**
+- [Network Monitoring Technologies](#network-monitoring-technologies)
+  - [Monitoring Protocols & Tools](#monitoring-protocols--tools)
+  - [Monitoring Methods](#monitoring-methods)
 
 ## Fundamentals
 
@@ -1751,5 +1784,793 @@ A route is selected in **three ways**:
 - A **metric** is a **numerical value** given to a path that indicates the **cost or preference** of choosing that particular path.
 - The main purpose of a routing metric is to **rank routes** and choose the **best way** to send network data.
 - **The lower the metric, the higher the preference** for choosing that route.
+
+[↑ Back to top](#networking)
+
+## Wireless
+
+### Wireless Devices & Technologies
+
+#### Frequency Bands
+Wi-Fi uses **three frequency bands**: **2.4 GHz**, **5 GHz**, and **6 GHz**. Each of these bands has its own **advantages and disadvantages**.
+
+![](images/frequency_bands.png)
+
+| | 2.4 GHz | 5 GHz | 6 GHz |
+| --- | --- | --- | --- |
+| **Range** | **Longest** | Shorter than 2.4 GHz | **Shortest** |
+| **Speed** | **Slowest** | Faster than 2.4 GHz | **Fastest** |
+| **Interference** | High: very common, used by lots of other devices | A lot less (not as common), more privacy | **Lowest**: relatively new, few devices use it |
+
+##### 2.4 GHz band
+- The 2.4 GHz band has the **longest range** of the three bands.
+- But it's also **very common** and is used by a lot of other devices, such as **microwave ovens, cordless phones, wireless cameras**, and so on.
+- These devices often **interfere with Wi-Fi signals**, which can cause problems: it can **slow down the Wi-Fi network** and sometimes make you **lose connection** to the Wi-Fi router.
+- It's also the **slowest** band.
+
+![](images/2_4_ghz_band.png)
+
+##### 5 GHz band
+- The 5 GHz band is **faster** than 2.4 GHz, and it's also **not as common**.
+- So there's **a lot less interference** and **more privacy** with the 5 GHz band.
+- **Disadvantage:** it has a **shorter range** than 2.4 GHz.
+
+##### 6 GHz band
+- The **newest** band is the 6 GHz band, and it is the **fastest** of the three.
+- Since it's relatively new, it has the **lowest interference**, because few devices use it.
+- **Disadvantage:** it has the **shortest range** of the three.
+
+---
+#### Wi-Fi Channels
+- Within all these frequency bands are **Wi-Fi channels**: **smaller ranges of frequencies** within a band.
+- Devices use these channels to **send and receive data**.
+- Channels have different **bandwidths**, measured in hertz, such as **20, 40, 80, and 160 MHz**.
+
+##### Channels in the 2.4 GHz band
+- The 2.4 GHz band (about **2.4–2.48 GHz**) is divided into channels, each with its own **frequency interval**.
+- **Neighboring channels overlap**, so only a few (like **1, 6 and 11**) can be used side by side **without interfering**.
+- We spread networks across the band by having **each router pick one channel**, and **every device connected to it uses that same channel**.
+- **Multiple routers can share the same channel**, but **speeds drop** as more routers are in range, because they **can't transmit packets at the same time** without causing a **collision** from the signals overlapping each other.
+- To avoid transmitting at the same time, which would **corrupt both signals**, every device (router or client) **listens before sending**. If the channel is **busy**, it **waits a random time** and tries again.
+
+> [!TIP]
+> **2.4 GHz channel diagram**
+>
+> In the picture below, we can see that there are **14 channels** that **overlap each other**, and each channel is **22 MHz** wide.
+> - **The wider the channel, the more data can be transferred.**
+> - On the 2.4 GHz band we can also have a **40 MHz channel**, which combines **two adjacent 20 MHz channels** into one wider block.
+
+![](images/channels_in_the_2_4_ghz_band.png)
+
+##### Changing channels
+- You can also use wireless channels to **fine-tune and alter a frequency**, because sometimes you might need to **change to a different channel** if you are experiencing **interference from other nearby wireless networks**.
+- For example, the 2.4 GHz band has **11 channels** to choose from, but of these 11 channels, **only three are non-overlapping**: **channels 1, 6, and 11**.
+- So if you're experiencing interference with other Wi-Fi networks, you can try **changing to one of these non-overlapping channels**.
+
+---
+#### 802.11h
+The **IEEE 802.11h** standard for wireless networking focuses on **dynamic frequency selection (DFS)** and **transmit power control (TPC)** in the **5 GHz band**, mainly in **Europe**.
+- It was made so that **radar systems** and other devices that use the same frequency band **would not interfere** with it.
+- The 802.11h standard was first made to **meet the rules in Europe**, but it's also being used in **other places around the world**.
+
+##### DFS (Dynamic Frequency Selection)
+- DFS is part of a system that lets wireless devices **know when radars are nearby** and **automatically change to a different channel**.
+- This keeps **5 GHz networks and radar devices** from **interfering with each other** too much.
+- When a radar is found, the device has to **wait a certain amount of time** before it can **use that channel again**.
+
+![](images/dfs_dynamic_frequency_selection.png)
+
+##### TPC (Transmit Power Control)
+- TPC **limits the maximum power** that wireless devices can send, which makes them **less likely to interfere** with other systems or devices that use the same frequency.
+
+---
+#### Band Steering
+**Band steering** is a feature in modern **Wi-Fi routers and access points** that **automatically connects Wi-Fi devices to the best frequency band**, such as 2.4 or 5 GHz.
+
+It does this so the user gets the **best performance available**:
+1. It looks at **signal strength**, which is the practical result of **distance, walls and obstacles**.
+2. It checks **what bands a Wi-Fi device can handle**.
+3. If the device supports **both the 2.4 and 5 GHz bands**, it **automatically connects it to the 5 GHz band**, because of its **faster speeds** and **less interference** than 2.4 GHz.
+
+![](images/band_steering.png)
+
+---
+#### Network Identifiers
+| Identifier | Full name | What it identifies |
+| --- | --- | --- |
+| **SSID** | Service Set Identifier | The **name** of your wireless network |
+| **BSSID** | Basic Service Set Identifier | A **single Wi-Fi router or access point** (its **MAC address**) |
+| **ESSID** | Extended Service Set Identifier | The **whole Wi-Fi network** made of **multiple** routers/access points |
+
+##### SSID
+When you set up a new Wi-Fi router, you can configure the **wireless settings** for your network. For example, you can set the **SSID** (**Service Set Identifier**), which is basically the **name of your wireless network**.
+
+![](images/ssid.png)
+
+- The SSID is **shared among all wireless devices** in your network.
+- The SSID is **customizable**, and you can call it whatever you want.
+
+> [!TIP]
+> **Example**
+>
+> When a wireless device **scans for wireless networks** to join in the vicinity of this router, the device will see the router's **SSID broadcast**, called for example **HOME-WIFI**. If it has the **proper credentials**, it can **join the network**.
+
+![](images/ssid_2.png)
+
+##### BSSID
+- Sometimes two nearby Wi-Fi routers or access points are **broadcasting the same SSID name**. The **BSSID** is how you **distinguish between the two signals**.
+- **BSSID** stands for **Basic Service Set Identifier**, and it is a **unique identifier** for a Wi-Fi router or access point.
+- The identifier is the **MAC address** of that device.
+- So the BSSID makes sure that you're **connecting to the correct SSID**.
+
+![](images/bssid.png)
+
+##### ESSID
+- If a network has **more than one Wi-Fi router or access point**, the **ESSID** (**Extended Service Set Identifier**) is used instead of the SSID.
+- Instead of identifying a single access point, the ESSID stands for the **whole Wi-Fi network**.
+- This lets a Wi-Fi device **move between access points without losing its connection**.
+
+![](images/essid.png)
+
+---
+#### Wireless Network Types
+##### Infrastructure
+- This is **very similar to a star topology**: you have **wired devices** (such as computers) **physically connected to a switch**, and a **wireless access point** that is also **connected by a cable to the switch**.
+- The wireless access point is there so that **wireless devices**, such as laptops, tablets, and cell phones, can **connect wirelessly** to the network.
+- So the wireless access point acts like a **bridge between the wireless network and the wired network**.
+- The infrastructure topology is **not limited to a single wireless access point**: you can have **multiple** wireless access points if you want. It just depends on the **needs of the network**.
+
+![](images/infrastructure.jpg)
+
+##### Ad Hoc
+- **Ad hoc** is a **very simple** wireless network, because it **doesn't rely on any infrastructure** such as cables, routers, servers, or wireless access points.
+- All the devices in an ad hoc network **wirelessly connect to other devices** in a simple **peer-to-peer network**.
+- So ad hoc networks are very useful for **setting up a quick wireless network on the fly**.
+
+**How it works:**
+1. **One device creates the network** by choosing an **SSID** and a **channel** and starting to **send frames**.
+2. **Others see it in their Wi-Fi list** and join like any normal network.
+3. The **sender** puts the **receiver's MAC address** in the frame and **transmits it on the shared channel**.
+4. The **receiver** picks it up and sends back an **acknowledgment (ACK)**.
+5. **Everyone else** on the channel hears it too, but **ignores it** because the address isn't theirs.
+
+![](images/ad_hoc.png)
+
+##### Wireless Mesh
+- A **wireless mesh** is the latest technology to solve the issue of **weak spots or dead spots** in Wi-Fi.
+- It is a **group of routers or Wi-Fi access points** placed in **different locations inside a home**, providing a **blanket of Wi-Fi coverage** throughout the home.
+- So it does a pretty good job of **eliminating weak Wi-Fi signals or dead spots**.
+- A great feature of mesh Wi-Fi is that the Wi-Fi points **communicate with each other wirelessly** to create **one large Wi-Fi network**.
+- There are **no cables involved** when the Wi-Fi points communicate with each other, which makes **placing the Wi-Fi points much easier**.
+
+![](images/wireless_mesh.png)
+
+##### Point-To-Point Wireless
+- A **point-to-point wireless** network is where **two wireless access points** in **different locations** are **directly connected to each other wirelessly**.
+- So if you want to **join two networks in two separate buildings**, you can create a **wireless link** between the two access points.
+- This is very **convenient and cost-saving**, because there is **no need to use a cable**.
+- However, for a strong and stable connection, most point-to-point wireless systems need a **clear line of sight** between the antennas in each place.
+- Most point-to-point setups use **directional antennas** to direct the wireless signal in the right direction, which **increases signal strength** and **reduces interference**.
+
+![](images/point_to_point_wireless.png)
+
+---
+#### Wi-Fi Encryption
+- To join a network with your device, you **select the network name** and then **supply a password**.
+- Wi-Fi networks can be **open**, with **no password required**, which means **anyone can join**.
+- In the majority of cases, Wi-Fi networks are **secure** and **require a password**.
+
+There are several different **protocols** used for securing a Wi-Fi network:
+
+| Protocol | Encryption | Status |
+| --- | --- | --- |
+| **WEP** | — | Earliest (1999); **easily hackable**, no longer used |
+| **WPA** | **TKIP** | Better than WEP, but **outdated** |
+| **WPA2** | **AES** | Stronger than WPA; resists brute force attacks |
+| **WPA3** | **AES with GCM**, plus **OWE** | **Latest**, enhanced security over WPA2 |
+
+##### WEP
+- **WEP** (**Wired Equivalent Privacy**) was developed in **1999**, and it's the **earliest security protocol** used for wireless networks.
+- WEP is **no longer used**, because it was **easily hackable**.
+
+##### WPA
+- **WPA** (**Wi-Fi Protected Access**) is another wireless protocol, developed to **solve the problems of WEP**.
+- WPA is **far better than WEP**, because it uses a **stronger encryption method** called **TKIP** (**Temporal Key Integrity Protocol**).
+- TKIP **dynamically changes its keys** as it's being used, which **ensures data integrity**.
+- But even though WPA is more secure than WEP, WPA is now **outdated**.
+
+##### WPA2
+- **WPA2** was developed to provide **even stronger security** than WPA, by **requiring a stronger wireless encryption method**.
+- While WPA uses **TKIP**, which is known to have **some limitations**, WPA2 uses **AES** (**Advanced Encryption Standard**).
+- AES uses a **symmetric encryption algorithm**, which makes it **strong enough to resist a brute force attack**.
+
+##### WPA3
+**WPA3** is the **latest security protocol** for wireless networks, offering **enhanced security features** compared to WPA2:
+- **Stronger encryption:** it uses **AES with GCM** (**Galois/Counter Mode**), which is a **mode of operation** for **symmetric key cryptographic block ciphers**.
+- **OWE** (**Opportunistic Wireless Encryption**): used to **prevent snooping** by **encrypting each device's connection** when using an **open public network**.
+
+---
+#### Authentication
+As discussed above, when users want to access a secure Wi-Fi network, such as in a home, they need to **type in the password**, and it's the **same password for everyone**.
+
+| | Pre-shared key authentication | Enterprise authentication |
+| --- | --- | --- |
+| **Passwords** | **Same password** for everyone | **Unique usernames and passwords** for individual users |
+| **Suitable for** | **Homes** | **Corporate networks** |
+| **Management** | — | **Centralized**, using a **RADIUS server** |
+
+- This is known as **pre-shared key authentication**, which is **suitable for homes**.
+- Using pre-shared key authentication in **corporate networks** would **not be a good idea** because of **security concerns and manageability**.
+- This is why corporate networks should use **enterprise authentication**:
+	- It **doesn't use the same password** for everyone. Instead, it assigns **unique usernames and passwords** to individual users, which makes it easier for the corporation to **manage who can access** their Wi-Fi network.
+	- Enterprise authentication uses a **RADIUS server** to provide **centralized authentication**.
+
+---
+#### Guest Network
+A **guest network** is a feature on modern Wi-Fi routers that allows **visitors to have internet access** in your home, **without** you giving them your **primary Wi-Fi password** or access to **any devices in your network**.
+
+> [!IMPORTANT]
+> **The problem**
+>
+> If you have visitors over and they need to access the internet with their device, for whatever reason (to check their email or look something up), they will ask for your **Wi-Fi password**. If you agree and give it to them, this could pose a **security risk**:
+> - They now have access to the internet using your Wi-Fi, and they could potentially **download a virus** and **affect other devices** in your home network.
+> - Or their device might **already be infected** with a virus, and once they join your home network, that virus could **spread to other devices** in your home.
+
+> [!TIP]
+> **The solution: a guest network**
+>
+> Visitors join your **guest network** and **only have internet access**:
+> - You **don't have to give them your primary** home Wi-Fi password.
+> - Even better, they **won't be able to see or access any other devices** in your home, because their device is **isolated** from your devices.
+>
+> So basically, it's like having **two separate networks** in your home.
+
+![](images/guest_network.png)
+
+---
+#### Captive Portal
+- Often, when you're at a place like an **airport or hotel**, they may give you the option of using their **Wi-Fi network** to access the internet.
+- As soon as you join, you may be directed to a **web page** called a **captive portal**, which makes you **log in** or **agree to their terms of service**.
+- It's basically a **gatekeeper for network access** that lets companies **manage and watch who uses their Wi-Fi**.
+- It allows companies to **handle their network resources** and **control their network bandwidth**.
+
+![](images/captive_portal.png)
+
+---
+#### Antennas
+**Antennas** are another factor that affects a wireless service. Since wireless devices operate using **radio waves**, the antenna is a **big factor** in determining the **range and speed** of a signal.
+
+##### Omnidirectional antenna
+- The **most common** type of antenna.
+- It **transmits the signal in all directions**, so every wireless device in **all directions** can pick up the signal, as long as it's **in range**.
+
+![](images/omnidirectional_antenna.png)
+
+##### Directional antenna
+- It **directs the signal in one direction**: **wherever you point the antenna**.
+
+![](images/directional_antenna.png)
+
+---
+#### Access Points
+| | Lightweight access points | Autonomous access points |
+| --- | --- | --- |
+| **Management** | Depend on a central **wireless LAN controller (WLC)** | **Largely independent**, handle their own network data |
+| **Used in** | **Large networks** | **Smaller networks** (easier to set up and manage) |
+
+##### Lightweight access points
+- **Lightweight access points** depend on a central **wireless LAN controller (WLC)** for the **management and configuration of multiple APs**.
+- They are typically used in **large networks**.
+
+![](images/lightweight_access_points.png)
+
+##### Autonomous access points
+- **Autonomous access points** are **largely independent** devices that **handle their own network data**.
+- They are **easier to set up and manage** for **smaller networks**.
+
+![](images/autonomous_access_points.png)
+
+[↑ Back to top](#networking)
+
+## Physical installations
+
+### Factors of Physical Installations
+
+#### Equipment & Power
+
+##### Server Rack
+> [!NOTE]
+> **Definition**
+>
+> A **server rack** is a **frame** that **holds and arranges IT equipment** like servers, routers, switches, and storage systems.
+
+**Rack dimensions:**
+- **Width:** racks have an **industry-standardized width of 19 inches**, which lets products from **different manufacturers** fit on the same rack.
+- **Height:** measured in **rack units (U)**. A rack unit is **1.75 inches**.
+- **Depth:** ranges from **20 to 36 inches** or more, based on the type of rack and the equipment that will be stored in it.
+
+> [!TIP]
+> **Example**
+>
+> If a server rack is labeled **42U**, the rack is **73.5 inches** tall (42 × 1.75).
+
+![](images/server_rack.png)
+
+- Server racks are **essential for data centers** and other places that need to keep their IT systems **organized and scalable**.
+- As a **network administrator**, you have to decide on the **size of the rack** (such as the **height and depth**) and **where the equipment is going to be mounted** on it.
+- This depends on **how much equipment** will be mounted in the rack and the **spacing between each piece of equipment** for **adequate airflow**.
+
+**Open vs. closed racks**
+Racks can be either **open** or **closed**, and which one to use depends on the **specific needs of the organization**. With **closed racks** (**cabinets**), the equipment is **enclosed in a cabinet or box**.
+
+| | Open racks | Closed racks (cabinets) |
+| --- | --- | --- |
+| **Airflow & cooling** | **Better** airflow and cooling | — |
+| **Access** | **Easy access** to the mounted equipment | **Lockable door**, so only the **proper personnel** have access |
+| **Main benefit** | **Cheaper** | **Security** |
+
+![](images/server_rack_2.png)
+
+---
+##### UPS
+- To keep a network in **constant operation**, you need to make sure it **always has power**.
+- **Power outages** can happen for several reasons, such as **storms and blackouts**.
+- To prevent a **disruption in network operation** from a power loss, you need to use a **UPS**.
+
+**UPS** stands for **Uninterruptible Power Supply**:
+- It's a **battery backup** that **supplies power** to your equipment if a **power outage** happens.
+- In addition to supplying backup power, a UPS also **protects against surges and spikes**.
+
+![](images/ups.png)
+
+---
+##### PDU
+A **PDU** is a device that has a **power cord connected to a box**:
+1. The power cord **plugs into an electrical wall outlet**.
+2. On the other end, the cord is connected to a **box or strip with multiple power outlets**, where you plug in the devices that need power.
+3. The PDU then **distributes power** to the devices plugged into those outlets.
+
+> [!NOTE]
+> In the IT world, PDUs are **rack-mounted**, and they are typically **plugged into a UPS** rather than directly into a wall outlet.
+
+![](images/pdu.png)
+
+---
+##### Port-Side Intake/Exhaust
+For network devices like **switches**, **port-side intake** and **port-side exhaust** refer to the **direction of airflow**: how **cool air enters** and how **hot air leaves** the device.
+
+| | Cool air comes in from | Hot air goes out the |
+| --- | --- | --- |
+| **Port-side intake** | The **front**, where the **ports** are | **Back** |
+| **Port-side exhaust** | The **back** | **Front**, where the **ports** are |
+
+![](images/port_side_intake_exhaust.png)
+
+---
+#### Cabling & Distribution
+
+##### Patch Panel
+- A **patch panel** is a **flat piece of hardware with network ports**, typically located in a **server room or wiring closet**.
+- Its purpose is to **reduce clutter** by keeping your **network cables neat and organized**.
+- A patch panel has a **large number of ports** and is installed on a **server rack near a switch**.
+
+![](images/patch_panel.png)
+
+Patch panels come in **different types**, depending on what kind of network you're running: **Ethernet** (described above), **fiber optic** and **coaxial**.
+
+![](images/patch_panel_2.png)
+
+---
+##### MDF
+- **MDF** stands for **Main Distribution Frame**.
+- It is the **main wiring frame**, used as a **distribution point for all the wiring** in a building.
+- **All of the internal communication lines** in a building connect to the MDF.
+- The **external lines** also connect to it, **completing the circuit**.
+
+![](images/mdf.png)
+
+---
+##### IDF
+- **IDF** stands for **Intermediate Distribution Frame**.
+- IDFs are **smaller distribution frames** located in **various locations in a building**.
+- They provide **better flexibility** to **distribute wires to the main distribution frame**.
+
+![](images/idf.png)
+
+> [!NOTE]
+> **MDF vs. IDF**
+>
+> | | MDF | IDF |
+> | --- | --- | --- |
+> | **Full name** | Main Distribution Frame | Intermediate Distribution Frame |
+> | **Size & number** | **The main** wiring frame of a building | **Smaller** frames in **various locations** |
+> | **Role** | Distribution point for **all the wiring**; internal and external lines connect here | Gives **flexibility** to distribute wires **to the MDF** |
+
+---
+#### Environment
+
+##### Humidity & Temperature
+Buildings that contain a lot of **server and networking equipment**, such as **data centers**, need to **keep track of the humidity** to make sure the equipment **performs at its best** and for **longevity**.
+
+**Humidity:** it is recommended to keep the **relative humidity between 45 and 55%**:
+- **Too little humidity** → **static electricity** builds up, leading to **electrostatic discharge**, which **damages the equipment**.
+- **Too much humidity** → **condensation and rust**.
+
+**Temperature:** the temperature in a data center also needs to be maintained within a certain range to **prevent overheating**, typically **between 64 and 81 °F**.
+
+---
+##### Fire Suppression
+**Fire suppression systems** in data centers are also very important for **data and equipment safety**.
+- These systems usually use **gas-based** or **fog** systems, because they are **non-conductive** and **don't leave behind a residue**.
+- A **clean agent system** like **FM200** is often chosen, because it's **safe for electrical equipment**.
+- **Sprinkler systems** can also be used, but they are often used **together with gas suppression** to **improve their effectiveness**.
+
+![](images/fire_suppression.png)
+
+[↑ Back to top](#networking)
+
+## Processes & procedures
+
+### Purpose Of Organizational Processes & Procedures
+
+#### Diagrams
+**Physical and logical diagrams** are **visual documents** used in many fields, including networking. They show how a network is **set up physically** and how **data flows logically**.
+
+| | Physical diagram | Logical diagram |
+| --- | --- | --- |
+| **Shows** | The **specific hardware and technology** used in a network | How the network **functions** and how **data flows** through it |
+| **Specific hardware?** | **Yes** | **No**: it focuses on **functionality** |
+
+##### Physical diagram
+- The physical diagram shows the **specific hardware and technology** that is going to be used in a network.
+- It shows **what type** of Ethernet cables, switch, computers, and Wi-Fi router are going to be used.
+
+![](images/physical_diagram.jpg)
+
+##### Logical diagram
+- A logical diagram **does not show the specific hardware** that's going to be used. Instead, it focuses on **functionality**.
+- It shows **how the network functions** and **how data flows** through the network.
+- This helps give an understanding of **how a network behaves** and **how to design a network**.
+
+![](images/logical_diagram.jpg)
+
+##### Rack diagrams
+- Rack diagrams give a **visual representation of a server rack**, showing **what equipment is installed** and **where to install it** on the rack.
+- For example, the rack diagram below shows a **monitor, switches, RAID arrays, a UPS**, and so on, and tells you **specifically where to install** these components in the server rack.
+
+![](images/rack_diagrams.png)
+
+##### Cable maps
+- Cable maps show **how the cables in a building are connected and routed**.
+- They show **what type of cables** are being used and **what specific device** they are connected to, such as a switch, router, patch panel, and so on.
+
+![](images/cable_maps.png)
+
+##### Network diagrams
+Based on the [OSI Model](#osi-model), **layer 1, layer 2, and layer 3** network diagrams show **computer network architecture and connectivity**.
+
+| Diagram | OSI layer | Shows | Also shows |
+| --- | --- | --- | --- |
+| **Layer 1** | Physical | The **physical layout** of network devices | Their **physical interfaces** |
+| **Layer 2** | Data link | **Logical connections** between layer 2 devices (switches, bridges) | Their **MAC addresses** |
+| **Layer 3** | Network | The **logical structure (topology)**: how routers, subnets, and network segments are connected | The **IP address** of each device |
+
+###### Layer 1
+- Layer 1 of the OSI model is the **physical layer**.
+- Layer 1 network diagrams show the **physical layout** of network devices such as servers, switches, routers, computers and so on.
+- They also show the **physical interfaces** of those devices.
+
+![](images/layer_1.png)
+
+###### Layer 2
+- Layer 2 is the **data link layer**.
+- Layer 2 network diagrams show **logical connections between layer 2 devices**, such as **switches and bridges**.
+- They also show the **MAC addresses** of those devices.
+
+![](images/layer_2.png)
+
+###### Layer 3
+- Layer 3 is the **network layer**.
+- Layer 3 network diagrams show the **logical structure or topology** and how **routers, subnets, and network segments** are connected.
+- They also show the **IP address** of each device.
+
+![](images/layer_3.png)
+
+##### Wireless survey / Heat map
+- A **wireless survey heat map** shows the **Wi-Fi signal strength and coverage** on a **floor plan or map**.
+- Its purpose is to **find Wi-Fi dead zones**.
+
+**How it's done:**
+1. To do a **wireless site survey**, a person walks around the area with a **Wi-Fi optimizer or survey tool** and **checks the signal strength** at different points.
+2. The heat map shows locations with **no or poor signal strength**, which tells a network administrator **what changes need to be made**, such as **moving Wi-Fi points** to different locations.
+3. It also shows **which Wi-Fi channel** is being used. So if there is **interference from other Wi-Fi networks**, the network administrator can try **changing to a different Wi-Fi channel**.
+
+![](images/wireless_survey_heat_map.png)
+
+---
+#### Asset & Resource Management
+
+##### Asset Inventory
+It's very important for a company or organization to **keep track of all its assets**. That's why it's important to have an **asset inventory**.
+
+> [!NOTE]
+> **Definition**
+>
+> An **asset inventory** is a **thorough list of all the things** that a business or organization **owns**, whether they are:
+> - **physical items**, such as servers, routers, switches, cables, and so on, or
+> - **non-physical items**, such as software, licensing, and warranties.
+
+**Why it's important:**
+- It gives you a **single place** to keep track of **where the assets are**, **how they are doing**, and **how they are being used**.
+- It helps in making **future decisions** for a business, such as **new purchases and upgrades**.
+
+![](images/asset_inventory.png)
+
+##### IPAM
+![](images/ipam.png)
+
+- **IPAM** stands for **IP Address Management**. It is a way to **plan, keep track of and manage IP addresses** and the **other network resources** connected to them.
+- It basically means making sure that **every device** on the network has a **real and unique IP address**, which **prevents IP conflicts** and makes sure the devices **can communicate** on the network.
+
+##### Service Level Agreement
+A **service level agreement** is an **agreement between a service provider and you**. It explains the **quality and performance standards** that the provider **promises to meet**.
+
+It makes clear:
+- **what is expected**
+- **how it will be measured**
+- **what will happen if it's not met**
+
+![](images/service_level_agreement.png)
+
+---
+#### Life-Cycle Management
+A product goes through these stages: **EOL** → **EOS** → **Decommissioning**.
+
+##### EOL (End of Life)
+- **End of life (EOL)** means that a product has **reached the end of its useful life**.
+- This could mean **getting rid of the product totally** or **replacing it with a newer version**.
+- EOL can happen when:
+	- a product **no longer meets business goals**
+	- **technology changes**
+	- **the market changes**
+
+##### EOS (End of Service)
+- The next step after EOL is **EOS** (**End of Service**).
+- This means the product will **no longer get any support**, such as **firmware updates, maintenance releases or security updates**.
+- It's important to **know these dates**, so a network administrator can stay informed on **what equipment needs to be replaced**.
+- The next step after EOS is **decommissioning**.
+
+![](images/eos_end_of_service.png)
+
+##### Decommissioning
+- **Decommissioning** something means **ending its use or service**.
+- It's a **set of steps** that make sure devices are **removed or retired** in a way that is **safe and good for the environment**.
+- This includes not only the **hardware** of a device, but also **any data** in that device.
+- The data on the device should be **erased** to make sure it **doesn't end up in the wrong hands** after it's been decommissioned.
+
+![](images/decommissioning.png)
+
+##### Software management
+- **Software management** is essential to keep **software and firmware up to date**, to **fix bugs** and **keep systems stable**.
+- **Patch management** is an important part of managing software and firmware, because it involves **installing changes that fix bugs and security holes**.
+- **Software updates** usually fix problems such as **security holes**, **slow performance**, or problems with how well **software programs and running systems work together**.
+- **Firmware updates** are also important. Hardware devices such as routers, printers, and so on get firmware updates to **fix bugs**, **make them run faster**, and **make them safer**.
+
+---
+#### Change & Configuration Management
+
+##### Change Management
+- **Change management** is a way to **handle changes to IT services and systems** so that there are **as few problems as possible** and the **transition goes smoothly**.
+- It's an important step for **documenting any changes, updates**, or other changes that could **affect how a network functions**.
+- Change management **plans, makes, and records changes**, usually by using **best practices from the industry**.
+
+##### Configuration Management
+- **Configuration management** is another type of **documentation**. It makes sure that a network is **maintained and runs smoothly** by **documenting the configurations of network devices**, such as routers, firewalls, switches, and so on.
+- It also involves the **production configuration**: the **current configuration** of a device that's **currently operating** on a network.
+- It's also important to **back up the configurations** of these running devices, to allow a **quick recovery** in case of a **device failure**.
+
+##### Baseline Configuration
+A **baseline** is how you **measure a network's performance**: it **measures and documents the performance** of a network **at a given time**.
+1. Typically, a baseline is taken when a network is **performing well**, and also when it is **not performing well**.
+2. By **comparing these two baselines**, a network administrator can see **how well or badly** the network is performing and make any **necessary changes**.
+
+> [!TIP]
+> **Golden configuration**
+>
+> A **baseline golden configuration** is the **gold standard baseline**: the **highest standard baseline** for how a network, its devices, and its configurations are performing.
+> It's an **approved setup** used as a **guide** to make sure a network **runs at its best**. Essentially, it's the **gold standard for comparison**.
+
+[↑ Back to top](#networking)
+
+## Network monitoring
+
+### Network Monitoring Technologies
+
+#### Monitoring Protocols & Tools
+
+##### SNMP
+> [!NOTE]
+> **Definition**
+>
+> **SNMP** stands for **Simple Network Management Protocol**. It is a protocol used for **network management**, and it's basically used for **collecting data from various network devices** such as routers, printers, and servers.
+
+###### Components
+SNMP has **two major components**:
+
+| Component | Runs on |
+| --- | --- |
+| **SNMP manager** | A **centralized computer or server** |
+| **SNMP agent** | The **individual network devices** |
+
+- The agents on these devices **collect information about their own device**, such as its **traffic statistics**, **IP and MAC addresses**, **operational state**, **errors**, and so on.
+- Each agent **stores this information in its own database**, called the **MIB** (**Management Information Base**).
+
+###### Requests and traps
+- **Request:** if the SNMP manager wants information about a certain device, it can **talk to that device's SNMP agent** and get the information that's **stored in the device's MIB**. When the SNMP manager sends a request, it uses **port 161** and the **UDP** protocol.
+
+![](images/requests_and_traps.png)
+
+- **Trap:** if something happens on the network, such as a **link or device failure**, the SNMP agent will **proactively send a message** to the SNMP manager to **notify it of the event**. This message is known as a **trap**. The SNMP agent uses **port 162** to send traps.
+
+| Message | Direction | Port |
+| --- | --- | --- |
+| **Request** | Manager → agent | **161** (UDP) |
+| **Trap** | Agent → manager | **162** |
+
+###### SNMP versions
+SNMP comes in **three versions**:
+1. **SNMPv1**
+	- Version 1 was the **original** version.
+	- It used a **plain-text community string** for authentication, which made it **vulnerable to hackers**.
+2. **SNMPv2c**
+	- Version 2c also used a **plain-text community string** for authentication, but it **improved error handling and overall performance** over version 1.
+	- It featured **GetBulk**, which made it easier to **retrieve large amounts of data**.
+	- It also has **InformRequest**, which lets agents **confirm that they have received notifications**.
+3. **SNMPv3**
+	- Version 3 has **better features** and **stronger security**.
+	- It added **integrity checking and encryption** to its authentication.
+
+---
+##### Data Flow
+- As a network administrator, it's important to **monitor the flow of data** on a network in case a problem happens. That's why there are **data flow analyzers** such as **NetFlow**.
+- NetFlow gives a network administrator the ability to **monitor data packets** as they **enter or exit a network interface**.
+- It **collects data** from various network devices such as **switches, routers, and firewalls**.
+
+---
+##### Packet Capture
+> [!NOTE]
+> **Definition**
+>
+> A **packet capture**, also known as a **packet sniffer**, is a **software or hardware tool** used to **troubleshoot and analyze traffic** on a network, such as logs, data packets, broadcasts, and so on.
+
+- It can **detect network problems** and **intrusion attempts**, and **monitor networking issues** so a technician can **correct the problem**.
+- A very common software **protocol analyzer** is called **Wireshark**, and it can be **downloaded for free** at wireshark.org.
+
+![](images/packet_capture.png)
+
+---
+##### Port Mirroring
+**Port mirroring** is a technique used to **monitor and analyze network traffic**.
+
+> [!NOTE]
+> **Definition**
+>
+> **Port mirroring** is when **all the data from a port on a switch** is **copied, or mirrored, to another port** on the switch.
+
+> [!TIP]
+> **Example**
+>
+> Let's say you want to see **all the traffic going through port 1** on a switch that's connected to a network.
+> 1. Port 1 is considered the **source port**.
+> 2. You then configure another port, such as port 2, to be the **destination port**.
+> 3. After the ports have been configured, **all the data going through port 1** is **copied to port 2**.
+> 4. On port 2, you can plug in a **computer running a packet analyzer** such as **Wireshark** to **analyze all the data from port 1**.
+
+![](images/port_mirroring.png)
+
+---
+##### Log Aggregation
+> [!NOTE]
+> **Definition**
+>
+> **Log aggregation** is the act of **collecting and organizing log data** from **several sources into one place**.
+
+- This makes it easy to **analyze, fix, and keep an eye on** systems and applications.
+- **Without log aggregation**, network administrators would have to **go through log files from many different sources manually**, which could **take a long time** and be **inefficient**.
+
+###### Syslog
+- Many systems and applications use **syslog** as a **standard logging protocol**.
+- Syslog works by using a **centralized syslog server or collector**. This server **receives syslog messages** from many different devices, such as **routers, switches, servers, and applications**.
+- Syslog messages inform network administrators about **activity**, **security incidents**, and **application issues**, which helps them **keep an eye on, fix, and keep their systems running smoothly**.
+
+![](images/syslog.png)
+
+---
+##### SIEM
+> [!NOTE]
+> **Definition**
+>
+> **SIEM** (**Security Information and Event Management**) is a **security tool** that enables a network to **look at security events and alerts in real time** to **find and fix security problems**.
+
+- It **combines security information management with security event management** to give a network a **single, centralized view of all its security data**.
+- This makes it possible to **find and fix possible issues before they cause problems** on a network.
+
+![](images/siem.png)
+
+---
+#### Monitoring Methods
+
+##### Network Discovery
+- **Network discovery** is a **key component of monitoring a network**. It deals with **locating and listing network resources, services, and devices** in a network.
+- By using **monitoring tools**, it enables the **detection of devices** such as computers, servers, applications, and services.
+- These monitoring tools can include things such as **SNMP**, **network scanners**, and **LLDP**.
+- These tools can **generate an inventory of resources** to monitor and analyze, by **identifying the devices and their characteristics**, such as **IP and MAC addresses**, the **type of device**, **software**, and **operating systems**.
+
+Network discovery can also be **ad hoc** or **scheduled**:
+
+| Type | How it works |
+| --- | --- |
+| **Ad hoc discovery** | Devices are discovered in a **direct and decentralized** manner, **when a network scan is specifically needed** |
+| **Scheduled discovery** | An **automated process** where a network scan is done **at a scheduled time** |
+
+---
+##### Baseline Metrics
+To keep a network **running normally**, it's important to **track and measure its performance while it is running normally**. This measurement creates a **standard performance benchmark** that can be used for **comparison when the network is not running normally**.
+
+> [!NOTE]
+> **Definition**
+>
+> This benchmark is created by **baseline metrics**. Baseline metrics help figure out **what typical network performance looks like**, by **monitoring key performance indicators** and **looking at traffic trends over time**.
+
+**Baseline metrics include things such as:**
+- **bandwidth usage**
+- **latency**
+- **packet loss**
+- **traffic patterns**, and so on
+
+These metrics are used as a **benchmark for comparison**, which helps network administrators **find problems, fix them**, and make sure that the network is **running at its best**.
+
+![](images/baseline_metrics.png)
+
+---
+##### Traffic Analysis
+> [!NOTE]
+> **Definition**
+>
+> **Network traffic analysis** is the process of **looking at network data** to **understand how devices communicate** and **spot possible problems or security threats**.
+
+- Analyzing traffic is essential to **learn more about network performance, security, and behavior**. It involves **tracking, recording, and evaluating** network traffic.
+- By doing this, network administrators can **identify security breaches**, **improve performance**, and **fix network issues**.
+
+---
+##### Performance Monitoring
+> [!NOTE]
+> **Definition**
+>
+> **Performance monitoring** is the process of **gathering, evaluating, and reporting on different metrics**, to evaluate the network and make sure it is **running at its best**.
+
+- This allows network administrators to **proactively detect and fix possible problems** before they **affect network operations**.
+- Some performance monitoring tools are **SNMP** and **NetFlow**.
+
+---
+##### Availability Monitoring
+**Availability monitoring** is the **observation of what resources, devices, and applications are available** on the network.
+
+---
+##### Configuration Monitoring
+- **Configuration monitoring** is the process of **keeping track of the configurations** of network devices, software, and systems in a network.
+- This includes **tracking changes** and **current configuration settings**, which is an important step in making sure that a network is **running at its best**.
+
+> [!NOTE]
+> **Monitoring methods at a glance**
+>
+> | Method | What it does |
+> | --- | --- |
+> | **Network discovery** | **Locates and lists** network resources, services, and devices |
+> | **Baseline metrics** | Create a **benchmark of normal performance** for comparison |
+> | **Traffic analysis** | Looks at network data to see **how devices communicate** and **spot problems or threats** |
+> | **Performance monitoring** | Gathers, evaluates, and reports on **metrics** so the network **runs at its best** |
+> | **Availability monitoring** | Observes **what is available** on the network |
+> | **Configuration monitoring** | Keeps track of **configurations and their changes** |
 
 [↑ Back to top](#networking)

@@ -27,6 +27,10 @@ GROUPS = {
     "Modern networks": ["Modern Network Environments"],
     "VLANs & switching": ["VLANS & Switch Technologies"],
     "Routing": ["Routing Technologies"],
+    "Wireless": ["Wireless Devices & Technologies"],
+    "Physical installations": ["Factors of Physical Installations"],
+    "Processes & procedures": ["Purpose Of Organizational Processes & Procedures"],
+    "Network monitoring": ["Network Monitoring Technologies"],
 }
 
 CALLOUTS = {
