@@ -126,6 +126,28 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [Monitoring Protocols & Tools](#monitoring-protocols--tools)
   - [Monitoring Methods](#monitoring-methods)
 
+**Disaster recovery**
+- [Disaster Recovery](#disaster-recovery-1)
+  - [Recovery Objectives & Metrics](#recovery-objectives--metrics)
+  - [Recovery Sites](#recovery-sites)
+  - [High Availability](#high-availability)
+  - [Tabletop Exercises](#tabletop-exercises)
+
+**DHCP & DNS**
+- [DHCP](#dhcp)
+  - [Assigning IP Addresses](#assigning-ip-addresses)
+  - [DHCP Server Settings](#dhcp-server-settings)
+  - [Self-Assigned IP Addresses](#self-assigned-ip-addresses)
+  - [DHCP Relay / IP Helper](#dhcp-relay--ip-helper)
+- [DNS, DNS Records & Protocols](#dns-dns-records--protocols)
+  - [DNS](#dns)
+  - [DNS Hierarchy](#dns-hierarchy)
+  - [DNS Records](#dns-records)
+  - [DNS Zones](#dns-zones)
+  - [Host File](#host-file)
+  - [DNS Security](#dns-security)
+  - [Time Protocols](#time-protocols)
+
 ## Fundamentals
 
 ### Network Topologies and Types
@@ -2572,5 +2594,505 @@ These metrics are used as a **benchmark for comparison**, which helps network ad
 > | **Performance monitoring** | Gathers, evaluates, and reports on **metrics** so the network **runs at its best** |
 > | **Availability monitoring** | Observes **what is available** on the network |
 > | **Configuration monitoring** | Keeps track of **configurations and their changes** |
+
+[↑ Back to top](#networking)
+
+## Disaster recovery
+
+### Disaster Recovery
+
+> [!NOTE]
+> **Definition**
+>
+> **Disaster recovery** is the process that a company uses to **get its IT infrastructure back up and running** after a disaster, such as a **natural disaster**, a **cyber attack**, and so on.
+
+In case a disaster happens, disaster recovery needs:
+1. A **disaster recovery plan** to be **created**.
+2. That plan to be **tested** to make sure **it works**.
+3. A **strategy** on **how to put that plan into action**, to **reduce data loss and business disruption**.
+
+> [!TIP]
+> **Goal**
+>
+> The goal of disaster recovery is to **get the business up and running as soon as possible**.
+
+---
+#### Recovery Objectives & Metrics
+
+##### Recovery Point Objective
+- The recovery point objective defines the **most data loss that is acceptable** over a **certain period of time**.
+- That time is measured **from the moment of a disaster** to the **latest backup that is known to be reliable**.
+
+**In short:** it's the **quantity of data** that a business **may lose** without causing **major problems or damage**.
+
+![](images/recovery_point_objective.png)
+
+##### Recovery Time Objective
+- The recovery time objective defines the **longest time** that a service **can be down** without causing problems.
+- This is important for **determining how to recover from a disaster**, since it shows **how quickly operations need to be back online** to **limit the damage** to the business and **possible losses**.
+
+![](images/recovery_time_objective.png)
+
+> [!NOTE]
+> **Recovery point vs. recovery time objective**
+>
+> | | Recovery Point Objective | Recovery Time Objective |
+> | --- | --- | --- |
+> | **Defines** | The **most data loss** that is acceptable | The **longest time** a service can be **down** |
+> | **In short** | The **quantity of data** a business may lose | How **quickly** operations need to be **back online** |
+
+##### MTTR
+- **MTTR** (**Mean Time To Repair**) is an indicator that tells you **how long it usually takes to fix** a major device or system **once it breaks**.
+- It's a way to **measure how well the repair procedure works** and **how dependable** the equipment or systems are.
+- **A lower MTTR means that repairs are done faster.**
+
+##### MTBF
+- **MTBF** (**Mean Time Between Failures**) is an indicator that shows **how long a system or part can run without failing**.
+- It's a good way to tell **how reliable a system is**, and it's commonly used to **plan maintenance ahead of time**. It's a way to **assess how reliable a system is in numbers**.
+- **A higher MTBF means a more reliable system.**
+
+![](images/mtbf.png)
+
+> [!NOTE]
+> **MTTR vs. MTBF**
+>
+> | | MTTR | MTBF |
+> | --- | --- | --- |
+> | **Full name** | Mean Time To Repair | Mean Time Between Failures |
+> | **Measures** | How long it usually takes to **fix** a device or system once it breaks | How long a system or part can **run without failing** |
+> | **Better when** | **Lower**: repairs are done faster | **Higher**: the system is more reliable |
+
+---
+#### Recovery Sites
+If a natural disaster were to occur, your goal would be to **get your organization up and running as fast as possible**. One of the best ways to do this is by using a **hot site**.
+
+| Site | Equipment | Readiness |
+| --- | --- | --- |
+| **Hot site** | **Fully functional**: servers, computers, printers, and so on, **already powered up** | Ready to go **on a moment's notice** |
+| **Warm site** | A **small portion** of the primary site's computer equipment | Gets the **bare essentials** of an organization up and running |
+| **Cold site** | **No computer equipment**, just a building | A location that is **agreed upon** in case of a disaster |
+
+##### Hot Site
+- A hot site is an **alternative site** that is **fully functional**.
+- It has servers, computers, printers, and so on **already powered up and ready to go**.
+- If the **primary site is destroyed**, for example **by a fire**, the hot site is **on standby** and **ready to go on a moment's notice**.
+
+> [!WARNING]
+> **Cost**
+>
+> Hot sites can be **very expensive**, because you have to pay not only for the **cost of the building**, but also for the **cost of replicating the equipment** inside.
+
+![](images/hot_site.png)
+
+##### Warm Site
+- A warm site is also an **alternative site** that is used in case of a disaster.
+- It's different from a hot site because it **doesn't have that much equipment**. It may have a **small portion of the computer equipment** that the primary site has, but that's about it.
+- It's basically a site you can go to, to get the **bare essentials** of an organization **up and running**.
+
+![](images/warm_site.png)
+
+##### Cold Site
+- A cold site is pretty much just a **location that is agreed upon** in case of a disaster.
+- It's basically **just a building** with **no computer equipment**.
+
+![](images/cold_site.png)
+
+---
+#### High Availability
+> [!NOTE]
+> **Definition**
+>
+> **High availability** means that a system can be **up and running and available all the time**, even when there are **problems or breakdowns**.
+
+There are **two types**: **active-active** and **active-passive**.
+
+| | Active-active | Active-passive |
+| --- | --- | --- |
+| **Devices** | **All** devices are up and running and **share their workload evenly** | **Some** devices are up and running, **some are on standby** |
+| **When a failure happens** | — | Only then are the **standby devices activated** |
+| **Result** | Systems stay up **all the time**: **less downtime** and **better performance** | This could cause a **delay** |
+
+##### Active-active
+In an active-active setup, **all the devices** in the network are **up and running**, and they all **share their workload evenly**.
+
+![](images/active_active.png)
+
+##### Active-passive
+- In an active-passive setup, **some devices are up and running** and **some devices are put on standby**.
+- Only **if a failure happens** will the **standby devices be activated**.
+- This could cause a **delay**.
+
+> [!TIP]
+> **Active-active is preferred**
+>
+> Active-active is **preferred over active-passive**, because it **keeps the systems up and running all the time**, which not only **reduces downtime** but also **improves performance**.
+
+![](images/active_passive.png)
+
+---
+#### Tabletop Exercises
+> [!NOTE]
+> **Definition**
+>
+> **Tabletop exercises** are a kind of **training** that allows a business to **practice dealing with emergencies or crises** in a **safe, low-stress setting**.
+
+- They ask participants to **talk about possible situations** and **how they may react**.
+- This helps find the **good and bad points** of **emergency plans and procedures**, and **where they can be improved**.
+
+![](images/tabletop_exercises.png)
+
+[↑ Back to top](#networking)
+
+## DHCP & DNS
+
+### DHCP
+
+**DHCP** stands for **Dynamic Host Configuration Protocol**.
+
+#### Assigning IP Addresses
+Every computer on a network **has to have an IP address** for communication purposes. There are **2 ways** that a computer can be assigned an IP address:
+
+| | Static IP | Dynamic IP |
+| --- | --- | --- |
+| **Assigned by** | A **user**, **manually** | A **DHCP server**, **automatically** |
+| **Settings** | IP address, subnet mask, default gateway, DNS server: **all typed in by hand** | IP address, and it **can also assign** the subnet mask, default gateway and DNS server |
+
+##### Static IP
+- A static IP is where a user **assigns a computer or device an IP address manually**.
+- For **each computer** on the network, you have to **open the computer's network configuration page** and **manually type in an IP address**.
+
+In addition to an IP address, you also have to type in:
+- the **subnet mask**
+- the **default gateway**
+- the **DNS server**
+
+##### Dynamic IP
+- A dynamic IP is where a computer **gets an IP address automatically** from a **DHCP server**.
+- The DHCP server can also assign the **subnet mask**, **default gateway** and a **DNS server**.
+
+---
+#### DHCP Server Settings
+
+##### Scope
+> [!NOTE]
+> **Definition**
+>
+> A **scope** is a **range of IP addresses** that a DHCP server **can hand out**.
+
+The devices on the network will **get an IP address from that range** of IP addresses.
+
+![](images/scope.png)
+
+##### Address Reservation
+- If you want a device on your network to have a **specific IP address all the time** (in other words, you **never want that IP address to change**), you can create a **reservation** on the DHCP server.
+- A reservation ensures that a **specific device**, identified by its **MAC address**, will **always be given the same IP address** when that device **requests an IP address** from the DHCP server.
+
+> [!NOTE]
+> Reservations are **not typically given to regular computers**. They are typically given to **special devices** that **require the same IP address constantly**, such as **network printers, servers, routers**, etc.
+
+![](images/address_reservation.png)
+
+##### DHCP Exclusion
+- A **DHCP exclusion** is an **IP address or range of IP addresses** that the DHCP server **does not give out**.
+- These IP addresses are **reserved for devices** that use them as **static IP addresses**.
+
+> [!NOTE]
+> **Reservation vs. exclusion**
+>
+> | | Reservation | Exclusion |
+> | --- | --- | --- |
+> | **Used for** | **Reserving dynamic** IP addresses | **Excluding static** IP addresses |
+> | **What the DHCP server does** | **Always gives the same IP address** to a specific device (by MAC address) | **Does not give out** the IP address or range |
+
+![](images/dhcp_exclusion.png)
+
+##### Lease
+- When a device **obtains an IP address** from a DHCP server, the server **assigns the IP address as a lease**.
+- So the computer **doesn't actually own the IP address**. It's actually a **lease**.
+
+> [!NOTE]
+> **Definition**
+>
+> A **lease** is the **amount of time** an IP address is **assigned to a computer**.
+
+> [!TIP]
+> **Example**
+>
+> If you run `ipconfig /all` in a **command prompt** on a **Windows computer**, you can see the **lease of the IP address** that was assigned to your computer by the DHCP server.
+
+A DHCP server will **automatically renew the IP address** for you, so you won't have to do anything or even notice that the IP address is being renewed.
+
+![](images/lease.png)
+
+---
+#### Self-Assigned IP Addresses
+
+##### APIPA
+Every computer has to have an IP address to communicate on a network. When a computer is set to **automatically obtain an IP address**, it **gets the IP from a DHCP server**.
+
+**What happens if the DHCP server can't be reached:**
+1. The computer **cannot reach the server**, because the **server was down** or the **connection to the server was lost**.
+2. Computers running **Microsoft Windows** will then **self-assign their own IP address**, in the range **169.254.0.1 – 169.254.255.254**.
+3. In addition, they will also **assign themselves a 16-bit subnet mask**.
+
+This type of self-assigned IP addressing is called **APIPA** (**Automatic Private IP Addressing**).
+
+> [!IMPORTANT]
+> **Why do computers do this?**
+>
+> Even though they **can't get an IP from a DHCP server**, they will **still be able to communicate** with other computers on the **same local network or subnet**, through an **Ethernet cable**, a **wireless access point**, or **ad-hoc mode**.
+
+##### SLAAC
+APIPA is used in **IPv4**. Similarly, **SLAAC** is used in **IPv6**.
+
+> [!NOTE]
+> **Definition**
+>
+> **SLAAC** stands for **Stateless Address Autoconfiguration**. It is a **feature built into IPv6** that allows IPv6 devices to **auto-configure their own IP address**.
+
+It works by using **router advertisements** that **come from the router** and **tell hosts how to configure themselves**:
+- the **default gateway**
+- the **address lifetime**
+- the **host portion** of the IPv6 address
+
+> [!NOTE]
+> **APIPA vs. SLAAC**
+>
+> | | APIPA | SLAAC |
+> | --- | --- | --- |
+> | **Used in** | IPv4 | IPv6 |
+> | **Routability** | **Not routable**: devices **can't communicate outside their own network** | **Routable**: devices **can talk outside their network** |
+> | **Role** | A **backup method** | The **preferred way** of assigning IPv6 addresses |
+
+---
+#### DHCP Relay / IP Helper
+
+##### Same subnet
+When a computer **needs an IP address**, it **broadcasts a request** to a DHCP server. If the server is on the **same subnet** as the computer, the DHCP server will **receive the request** and **assign the computer an IP address**.
+
+![](images/same_subnet.png)
+
+##### Different subnets
+> [!WARNING]
+> **Problem**
+>
+> If the computer and the DHCP server are **not on the same subnet**, the DHCP server **will not receive the request**, because **broadcasts can't go outside their own subnet**.
+
+This is where a **DHCP relay** comes in.
+
+> [!NOTE]
+> **Definition**
+>
+> A **DHCP relay**, or **IP helper**, is a **service enabled on a router** that **relays a DHCP broadcast** it receives by **forwarding it**.
+
+**How it works:**
+1. The computer **broadcasts a request** for an IP address.
+2. The **DHCP relay on the router receives the broadcast**.
+3. The relay **forwards the broadcast to the DHCP server**.
+4. The server **assigns the computer an IP address**.
+
+![](images/different_subnets.png)
+
+[↑ Back to top](#networking)
+
+---
+
+### DNS, DNS Records & Protocols
+
+#### DNS
+> [!NOTE]
+> **Definition**
+>
+> **DNS** stands for **Domain Name System**. DNS **resolves domain names to IP addresses**.
+
+The reason it has to do this is that **computers do not understand names**, they **only understand numbers**.
+
+- A **domain name** is just the **text that you type in a web browser** when you want to go to a certain website, such as **example.com**, **google.com**, **yahoo.com**, and so on.
+- When you type in a domain name such as example.com in a web browser, DNS will **resolve that domain name into an IP address** so you can **retrieve the website**.
+
+##### Parts of a domain name
+**Computers read domain names from right to left**, and domain names have **several parts**:
+
+| Part | In the example.com example |
+| --- | --- |
+| **Root domain** | The **hidden `.`** after .com |
+| **Top-level domain** | **.com** |
+| **2nd-level domain** | **example** |
+| **Subdomain** | An **additional name to the left** of the 2nd-level domain, such as **www** |
+
+---
+#### DNS Hierarchy
+There are **3 main levels of servers**:
+
+| Server | Role |
+| --- | --- |
+| **Root servers** | The **top of the DNS hierarchy**. They look at the domain name and **forward the query to the correct top-level domain server** |
+| **Domain servers** | Responsible for **top-level domains**, such as **.com, .net, .org**, and so on |
+| **Name servers** | **Store the DNS records** for resolving domain names to IP addresses |
+
+> [!NOTE]
+> Out of these 3, the **name servers** are the DNS servers responsible for **storing the DNS records** for resolving domain names to IP addresses, because they are responsible for **knowing everything about the domain name**, including the **IP addresses** and much more.
+
+**How example.com is resolved:**
+1. For your query to resolve example.com, it needs to **know which name server to ask**. To find the correct name server, the query must **first go through the top of the DNS hierarchy**, which is the **root server**.
+2. The root server **looks at example.com** and **forwards the query to the .com top-level domain server**, because the top-level domain for example.com is **.com**.
+3. The top-level domain server **forwards the query to the specific authoritative name server** that's responsible for the example.com domain.
+4. Once the query **reaches the name server**, example.com is **resolved to the IP address**, so the website can be retrieved.
+
+![](images/dns_hierarchy.jpg)
+
+---
+#### DNS Records
+In a **DNS database** you have a **zone file**, and this zone file **contains the DNS records**.
+
+##### A record
+- The **A record** is what **resolves a domain to an IPv4 address**.
+- So when you type example.com in a web browser, the A record is what DNS uses to **resolve the domain name to an IP address**.
+
+> [!NOTE]
+> **TTL (Time To Live)**
+>
+> The record also has a **TTL** field, which tells us **how long each record is valid** until the **next update**.
+
+![](images/a_record.png)
+
+##### AAAA record
+This record is **like the A record**, but the difference is that **AAAA records resolve domain names to IPv6 addresses**.
+
+![](images/aaaa_record.png)
+
+##### CNAME record
+> [!NOTE]
+> **Definition**
+>
+> A **CNAME record** **resolves a domain or subdomain to another domain name**. Basically, it is an **alias for another domain name**.
+
+**www** is a **common subdomain**, which is why it is common to **create a CNAME record** for it.
+
+![](images/cname_record.png)
+
+This is why, when you type **www.example.com** or **example.com** in your browser, you'll **end up at the same example.com website**: because of the **CNAME record**.
+
+![](images/cname_record_2.png)
+
+Subdomains are also often used when a website has **different services running on the same server**, using the **same IP address**.
+
+> [!TIP]
+> **Example**
+>
+> 1. example.com has an **FTP service** running on the **same server as its website**.
+> 2. They can create a **subdomain** such as **FTP.example.com** for the FTP service on the server.
+> 3. Then they can **create a CNAME record** and have it **directed to example.com**.
+> 4. Even though it's pointing to example.com, when the request **reaches the web server**, the web server will **inspect the URL that the user has typed** and **direct it to its FTP service** on the server.
+
+![](images/cname_record_3.png)
+
+##### MX record
+The **MX** (**Mail Exchange**) record is **used for email**. It simply **points to the server where email should be delivered** for that domain name.
+
+> [!TIP]
+> **Example**
+>
+> 1. When you send an email to **tom@example.com**, your **mail transfer agent** will **query the MX records for example.com**, because it's **looking for an email server**.
+> 2. DNS will then **respond back, telling it which server to send the email to**.
+>
+> In the example below, the server to send the email to is **mail1.example.com**.
+
+![](images/mx_record.png)
+
+**Primary and secondary email servers:**
+- MX records will generally have **two entries**, a **primary email server** and a **secondary email server**, along with a **priority number**.
+- **The lower priority number means that it's the primary email server.**
+- If the primary email server **gets overwhelmed or goes down**, the **secondary email server** would be used.
+
+##### NS record
+- The **NS** (**Name Server**) record provides the **name of the name server** that **resolves a specific domain to an IP address**.
+- The NS record will generally **list multiple name servers**, because there is **not only one name server** on the internet that can resolve a specific domain to an IP address.
+
+![](images/ns_record.png)
+
+##### PTR record
+- This is the **reverse of an A or AAAA record**: **PTR records resolve IP addresses to domain names**.
+- They are used to **prevent email spam**. The email server uses the PTR record to **make sure that the sender is authentic**, by **matching the domain name in the email with its authentic IP address**.
+- When an email arrives, the **receiving server looks at the IP it came from** and **checks that IP's PTR record** to see if it **belongs to a properly configured mail server**.
+
+![](images/ptr_record.png)
+
+![](images/ptr_record_2.png)
+
+##### TXT record
+- The **TXT** (**Text**) record contains **miscellaneous information about a domain**, such as **general or contact information**.
+- It also helps to **prevent email spam**, by **making sure incoming email is coming from a trusted or authorized source**.
+
+![](images/txt_record.png)
+
+> [!NOTE]
+> **DNS records at a glance**
+>
+> | Record | What it does |
+> | --- | --- |
+> | **A** | Domain name → **IPv4** address |
+> | **AAAA** | Domain name → **IPv6** address |
+> | **CNAME** | Domain or subdomain → **another domain name** (alias) |
+> | **MX** | Points to the **email server** for a domain |
+> | **NS** | Provides the **name of the name server** that resolves a domain |
+> | **PTR** | IP address → **domain name** (reverse of A/AAAA); helps **prevent email spam** |
+> | **TXT** | **Miscellaneous information** about a domain; helps **prevent email spam** |
+
+---
+#### DNS Zones
+| Zone | Resolves |
+| --- | --- |
+| **Forward zone** | **Domain names → IP addresses** |
+| **Reverse zone** | **IP addresses → domain names** |
+
+---
+#### Host File
+- **Before DNS**, operating systems used a **host file** to **resolve host names to IP addresses**.
+- The host file **works like a local database**, letting you **change how DNS resolves certain domains**.
+- This means that **instead of querying a DNS server**, the computer will **use the information in the host file** to connect to a website or a server.
+
+![](images/host_file.png)
+
+---
+#### DNS Security
+
+##### DNSSEC
+- To make sure **DNS remains secure**, **DNSSEC** (**Domain Name System Security Extensions**) was developed.
+- It is a **group of cryptographic protocols** that make DNS safer by **adding digital signatures to DNS records**.
+- These signatures are added to DNS entries so that the **resolvers can make sure the data hasn't been tampered with**.
+
+##### DoH
+- Another security protocol that DNS uses is **DoH** (**DNS over HTTPS**).
+- This protocol **encrypts DNS queries using HTTPS**, which makes your internet browsing **safer and more private**.
+- DoH **doesn't send DNS requests in plain text**. Instead, they are **encrypted in regular HTTPS traffic**.
+
+##### DoT
+- **DoT** (**DNS over TLS**, **Transport Layer Security**) **also encrypts DNS queries**.
+- It **improves privacy and security** by **stopping others from tampering**.
+- It uses **port 853** and **adds TLS encryption to UDP**, which is what DNS queries use.
+
+> [!NOTE]
+> **DNSSEC vs. DoH vs. DoT**
+>
+> | Protocol | Full name | How it makes DNS safer |
+> | --- | --- | --- |
+> | **DNSSEC** | Domain Name System Security Extensions | Adds **digital signatures** to DNS records, so resolvers can check the data **hasn't been tampered with** |
+> | **DoH** | DNS over HTTPS | **Encrypts DNS queries** inside **regular HTTPS traffic** |
+> | **DoT** | DNS over TLS | **Encrypts DNS queries** with TLS, on **port 853** |
+
+---
+#### Time Protocols
+
+##### NTP
+- **NTP** (**Network Time Protocol**) is used to **synchronize the clocks of computers** with the **US Naval Observatory master clocks**.
+- This protocol **runs on each computer** and **sends out periodic requests to the server** to make sure that the **time is in sync**.
+
+![](images/ntp.png)
+
+##### NTS
+**NTS** is a protocol that **makes NTP safer**, by making sure that **time synchronization between clients and servers** is both **encrypted and verified**.
+
+![](images/nts.png)
 
 [↑ Back to top](#networking)

@@ -31,6 +31,8 @@ GROUPS = {
     "Physical installations": ["Factors of Physical Installations"],
     "Processes & procedures": ["Purpose Of Organizational Processes & Procedures"],
     "Network monitoring": ["Network Monitoring Technologies"],
+    "Disaster recovery": ["Disaster Recovery"],
+    "DHCP & DNS": ["DHCP", "DNS, DNS Records & Protocols"],
 }
 
 CALLOUTS = {
