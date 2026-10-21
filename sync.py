@@ -25,7 +25,7 @@ GROUPS = {
     "Cabling & transmission": ["Transmission media & Transceivers"],
     "IP addressing": ["IPv4 Addressing", "Subnet Mask", "IPv6 Addressing"],
     "Modern networks": ["Modern Network Environments"],
-    "VLANs & switching": ["VLANS & Switch Technologies"],
+    "VLANs & switching": ["VLANS & Switch Technologies", "Spanning Tree Protocol"],
     "Routing": ["Routing Technologies"],
     "Wireless": ["Wireless Devices & Technologies"],
     "Physical installations": ["Factors of Physical Installations"],
@@ -33,6 +33,9 @@ GROUPS = {
     "Network monitoring": ["Network Monitoring Technologies"],
     "Disaster recovery": ["Disaster Recovery"],
     "DHCP & DNS": ["DHCP", "DNS, DNS Records & Protocols"],
+    "VPN & remote access": ["VPN & Connection Methods"],
+    "Security": ["Network Security Concepts", "Types Of Attacks"],
+    "Performance": ["Common Performance Issues"],
 }
 
 CALLOUTS = {

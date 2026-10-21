@@ -86,6 +86,11 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
 - [VLANS & Switch Technologies](#vlans--switch-technologies)
   - [VLANs](#vlans)
   - [Switch Technologies](#switch-technologies)
+- [Spanning Tree Protocol](#spanning-tree-protocol)
+  - [Finding a device's MAC address](#finding-a-devices-mac-address)
+  - [Adding redundancy](#adding-redundancy)
+  - [Broadcast Storm](#broadcast-storm)
+  - [Spanning Tree Protocol Step by Step](#spanning-tree-protocol-step-by-step)
 
 **Routing**
 - [Routing Technologies](#routing-technologies)
@@ -147,6 +152,36 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
   - [Host File](#host-file)
   - [DNS Security](#dns-security)
   - [Time Protocols](#time-protocols)
+
+**VPN & remote access**
+- [VPN & Connection Methods](#vpn--connection-methods)
+  - [VPN](#vpn)
+  - [Types of VPN](#types-of-vpn)
+  - [Connection Methods](#connection-methods)
+  - [In-Band Management vs. Out-of-Band Management](#in-band-management-vs-out-of-band-management)
+
+**Security**
+- [Network Security Concepts](#network-security-concepts)
+  - [Encryption & Certificates](#encryption--certificates)
+  - [Identity & Access](#identity--access)
+  - [Physical Security & Deception](#physical-security--deception)
+  - [Security Risks & Models](#security-risks--models)
+  - [Data & Compliance](#data--compliance)
+  - [Devices & Industrial Systems](#devices--industrial-systems)
+- [Types Of Attacks](#types-of-attacks)
+  - [Network Attacks](#network-attacks)
+  - [Rogue Devices & Services](#rogue-devices--services)
+  - [Physical Attacks](#physical-attacks)
+  - [Phishing & Malware](#phishing--malware)
+
+**Performance**
+- [Common Performance Issues](#common-performance-issues)
+  - [Congestion](#congestion)
+  - [Contention](#contention)
+  - [Bottleneck](#bottleneck)
+  - [Bandwidth](#bandwidth)
+  - [Latency](#latency)
+  - [Packet Loss](#packet-loss)
 
 ## Fundamentals
 
@@ -233,7 +268,7 @@ In computer networking, there are terms for the **flow of traffic**:
 > The **OSI** (**Open Systems Interconnection**) model was developed to create a **set of standards for network communication**.
 > It describes how information from **software in one computer** moves through a network to reach **software on another computer**.
 
-![](images/osi_model.png)
+![](images/osi_data_flow.gif)
 
 The OSI model breaks down data communication into **7 different layers**:
 
@@ -308,7 +343,7 @@ Provides the **transfer of data between end users** using the **TCP** or **UDP**
 - It is considered **intelligent** because it **learns the physical (MAC) addresses** of the devices connected to it and stores them in its **table**. So when a **frame** is sent to a switch, it is forwarded **only to the intended destination port**.
 - Works at **layer 2** (Data Link) of the [OSI Model](#osi-model).
 
-![](images/switch.png)
+![](images/switch_mac_table.gif)
 
 ---
 #### Router
@@ -344,7 +379,7 @@ Provides the **transfer of data between end users** using the **TCP** or **UDP**
 #### Load Balancer
 - A piece of **hardware or software** used to **distribute incoming traffic across multiple servers**, so that **no single server becomes overwhelmed** with the workload.
 
-![](images/load_balancer.png)
+![](images/load_balancer.gif)
 
 ---
 #### QoS (Quality of Service)
@@ -357,7 +392,7 @@ Provides the **transfer of data between end users** using the **TCP** or **UDP**
 >
 > A network administrator can decide that an application such as **voice communication** is more important than **web browsing**, and give voice communication a **higher priority**, so it gets bandwidth **before** the other application.
 
-![](images/qos_traffic_shaping.png)
+![](images/qos_bandwidth.gif)
 
 [↑ Back to top](#networking)
 
@@ -378,7 +413,7 @@ Provides the **transfer of data between end users** using the **TCP** or **UDP**
 - **Bypassing restrictions:** it can **bypass** restricted content.
 - **Speed:** a proxy can **cache** (store copies of) websites that are frequently used by its clients.
 
-![](images/proxy_server.png)
+![](images/forward_proxy.gif)
 
 ---
 #### NAS (Network Attached Storage)
@@ -459,7 +494,7 @@ Provides the **transfer of data between end users** using the **TCP** or **UDP**
 
 **Result:** this **reduces the latency** caused by long distances and **dramatically speeds up** website retrieval.
 
-![](images/cdn_edge_servers.png)
+![](images/cdn_pop.gif)
 
 [↑ Back to top](#networking)
 
@@ -643,11 +678,11 @@ Whenever a computer wants to communicate with another computer, the communicatio
 
   Once these steps have taken place, data can be delivered.
 
-  ![](images/tcp_three_way_handshake.png)
+  ![](images/tcp_three_way_handshake.gif)
 
 - TCP **guarantees the delivery** of the data, so if a data packet goes astray and doesn't arrive, then TCP will resend it.
 
-  ![](images/tcp_guaranteed_delivery.png)
+  ![](images/tcp_guaranteed_delivery.gif)
 
 ---
 
@@ -656,7 +691,7 @@ UDP is also for sending and receiving data.
 - The main difference from TCP is that UDP is **connectionless**, which means that it does not establish a session and it does not guarantee data delivery
 - UDP is also known as a **fire and forget** protocol because it sends data and it doesn't really care what happens to it
 
-  ![](images/udp_connectionless.png)
+  ![](images/udp_connectionless.gif)
 
 - Because of the less overhead that is involved of not guaranteeing data delivery, **UDP is faster than TCP**
 
@@ -691,7 +726,7 @@ IPsec was developed to ensure that the data cannot be stolen by protecting the d
 		  1. **AH - Authentication Header:** It offers authentication and integrity, but it doesn't do any encryption
 		  2. **ESP - Encapsulating Security Payload:** It is the better of the two protocols. ESP does offer all three: authentication, integrity, and encryption
 
-  ![](images/diffie_hellman_key_exchange.png)
+  ![](images/ipsec_tunnel.gif)
 
 - IPsec operates in **2 different modes**:
   1. Transport mode
@@ -727,22 +762,22 @@ Stands for **Generic Route Encapsulation**
 - When there is a **single transmitter** of data and that data is being **received by every device**
 - E.g.: When a computer is sending an ARP broadcast out on the network and every computer will receive the message
 
-  ![](images/broadcast_traffic.png)
+  ![](images/broadcast_traffic.gif)
 
 ##### Unicast
 - It is a **one-to-one** communication, so the data is sent to a single device
 
-  ![](images/unicast_traffic.png)
+  ![](images/unicast_traffic.gif)
 
 ##### Multicast
 - The data is sent to **multiple devices** at the same time, but not to every device
 
-  ![](images/multicast_traffic.png)
+  ![](images/multicast_traffic.gif)
 
 ##### Anycast
 - Data is sent to the **nearest device**
 
-  ![](images/anycast_traffic.png)
+  ![](images/anycast_traffic.gif)
 
 [↑ Back to top](#networking)
 
@@ -786,7 +821,7 @@ Satellite internet is typically used when there is **no other option available**
 >
 > An example of a satellite internet provider is **Starlink**.
 
-![](images/satellite.png)
+![](images/satellite.gif)
 
 ---
 #### Wired
@@ -906,13 +941,13 @@ It uses **pulses of light** to send data, and as a result it is **very fast** an
 1. **Single-mode fiber**
 	- Allows light to enter at **only a single angle**. Because the light enters at this single angle, it can span **great distances**.
 
-![](images/fiber_optic_cable.png)
+![](images/fiber_single_mode.gif)
 
 2. **Multi-mode fiber**
 	- Light travels in **multiple beams** that reflect off the walls of the cable.
 	- Unlike single-mode fiber, multi-mode is made for **short distances**.
 
-![](images/fiber_optic_cable_2.png)
+![](images/fiber_multimode.gif)
 
 ---
 #### Connectors
@@ -1021,7 +1056,7 @@ The service that converts (translates) a private IP address into a public IP add
 	- **private → public**
 	- **public → private**: if a computer on the internet wants to communicate with a computer on this private network, NAT needs to translate the public IP address to the private IP address of that computer.
 
-![](images/nat.jpg)
+![](images/nat.gif)
 
 ##### PAT
 **PAT** (**Port Address Translation**) is an **extension of NAT**.
@@ -1036,7 +1071,7 @@ The service that converts (translates) a private IP address into a public IP add
 >
 > PAT gives **each connection its own port number**, which allows devices on a private network to **share a single public IP address**. When the router gets a reply, it can decide which private IP to pick, because the **port number is mapped to the private IP**.
 
-![](images/pat.png)
+![](images/pat.gif)
 
 ---
 #### Private IP Address Classes
@@ -1176,7 +1211,7 @@ The reason is **manageability**: breaking down a large network into smaller netw
 - Let's say there were no small networks, and an organization has a large number of computers in **one huge network**.
 - When a computer wants to talk to another computer, it needs to know how and where to reach that computer. It does this by using a **broadcast** to locate that computer.
 
-![](images/why_does_an_ip_address_have_a_network_and_a_host_part.png)
+![](images/subnet_broadcast_storm.gif)
 
 - The problem is that when a computer sends out a broadcast on the network, asking the target computer to identify itself so they can communicate, **every computer on this network also receives the broadcast**, because they are all on the same network.
 - If every computer on this large network were broadcasting to every other computer just to communicate, it would **slow down the network** and potentially **bring it to a halt** because of the tremendous amount of **broadcast traffic** it would cause.
@@ -1185,7 +1220,7 @@ The reason is **manageability**: breaking down a large network into smaller netw
 1. To prevent this, the network needs to be **broken down into smaller networks**.
 2. The networks are broken down and **physically separated by routers**. This alleviates the problem of excessive traffic, because **broadcasts do not go past routers**.
 
-![](images/why_does_an_ip_address_have_a_network_and_a_host_part_2.png)
+![](images/subnets_contained_broadcast.gif)
 
 - After subnetting, if two computers in two different subnets want to communicate, the computer sends out a broadcast that **only the computers in its own subnetwork** can receive.
 - Since the target computer is on a different subnetwork, the data is sent to the **default gateway**, which is the **router**, and the router then intelligently **routes the data to the destination**.
@@ -1288,7 +1323,7 @@ An IPv6 address has **8 groups of hexadecimals**, known as **hextets**. To compr
 > 3. The ISP forwards it like **any normal IPv4 packet**, **without ever seeing the IPv6 packet inside**.
 > 4. When it reaches the router of the other network (the **tunnel end**), the IPv4 header is removed (**decapsulation**) and the original IPv6 packet is forwarded to the destination device, **unchanged**.
 
-![](images/tunneling.png)
+![](images/ipv6_tunneling.gif)
 
 ##### Dual Stack
 **Dual stack** is another transition technology that allows your device to **process IPv4 and IPv6 data simultaneously**, so you won't have any **compatibility issues** when accessing websites and servers during the migration.
@@ -1350,7 +1385,7 @@ In a traditional network you have **switches and routers**, and these devices ha
 - **Traditional network:** when routers and switches receive data, they refer to **their own control plane** (such as routing and switching tables) and, based on their configuration, **decide themselves** how and where the data is sent.
 - **SDN:** the control plane is **taken away from the individual routers and switches** and is instead managed by **software in a centralized location**.
 
-![](images/traditional_network_vs_sdn.png)
+![](images/sdn_controller.gif)
 
 ##### Benefits
 An SDN allows network administrators to **manage and configure all the traffic** in a network. This has several benefits:
@@ -1434,7 +1469,7 @@ SD-WAN is also **transport agnostic**, which means it'll **work with just about 
 
 So zero trust architecture provides the **highest security framework** to verify someone's identity.
 
-![](images/zta_zero_trust_architecture.png)
+![](images/zero_trust.gif)
 
 ---
 #### SASE (Secure Access Service Edge)
@@ -1572,7 +1607,7 @@ If you want to **connect VLANs together across different switches**, this is whe
 2. Switch 1 sees that it's going to a **VLAN 10 device**, so it **tags the frame** with the VLAN ID: **VLAN 10**.
 3. Once the frame reaches the **trunk port on switch 2**, switch 2 **looks at the VLAN ID on the tag** and forwards the frame to the computer on **VLAN 10**.
 
-![](images/vlan_802_1q_tagging.png)
+![](images/vlan_trunk_tagging.gif)
 
 ---
 ##### Native VLAN
@@ -1617,7 +1652,7 @@ This is where **VXLAN** comes in. **VXLAN** stands for **Virtual Extensible Loca
 
 This is where we get the term **DCI** (**Data Center Interconnect**), which refers to a technology that **connects multiple data centers together** in a VXLAN.
 
-![](images/vxlan.png)
+![](images/vxlan_tunnel.gif)
 
 ---
 #### Switch Technologies
@@ -1644,12 +1679,12 @@ A networking technique that uses **multiple cables connected to multiple ports**
 The term **duplex** in a network switch means that a device can **send and receive data in either direction at the same time**, which is also known as **full duplex**.
 - It is **faster** than half duplex and can **double the bandwidth**.
 
-![](images/full_duplex.png)
+![](images/full_duplex.gif)
 
 ###### Half duplex
 If a device can only send and receive data in **one direction at a time**, this is known as **half duplex**.
 
-![](images/half_duplex.png)
+![](images/half_duplex.gif)
 
 ---
 ##### Interface speed
@@ -1669,6 +1704,150 @@ If a device can only send and receive data in **one direction at a time**, this 
 - The MTU size for Ethernet is **1500 bytes** by default.
 - Frames bigger than 1500 bytes are called **jumbo frames**. These are typically **9000 bytes** in size.
 - Jumbo frames are **not typically used on the internet or in homes**. They are typically used in **high-speed internal networks** for **moving large amounts of data**. These high-speed networks use **gigabit** or even **10 gigabit** switches.
+
+[↑ Back to top](#networking)
+
+---
+
+### Spanning Tree Protocol
+
+#### Finding a device's MAC address
+- When network devices want to communicate with other network devices, they first need to **know the MAC address** of those devices.
+- They find the MAC address of the device they want to talk to by **broadcasting a frame** out on the network, **asking for that device's MAC address**.
+- Once the MAC address is known, **communication can take place**.
+
+> [!TIP]
+> **Example**
+>
+> We have **four computers (A, B, C, D)** in a **star topology**, with a **switch connecting all of them**. If computer A wants to communicate with another computer on this network, it'll **send a broadcast frame**, and the switch will **forward that broadcast to every device** that's connected to it.
+
+![](images/stp_switch_broadcast.gif)
+
+#### Adding redundancy
+- In some cases, network administrators want to **add redundancy** to their network in case of a **switch or cable failure**.
+- So instead of having **one switch**, they may use **multiple switches**.
+
+> [!TIP]
+> **Example**
+>
+> Below we have **3 switches**, so computer A has **2 options** it can take to communicate with computer C.
+
+![](images/stp_broadcast_loop_2x_1.gif)
+
+---
+#### Broadcast Storm
+The problem is that with a setup like this, when a computer wants to talk to another computer, it needs to **send a broadcast frame** out on the network to find the computer it wants to talk to. But:
+
+1. **Phase 1**
+	- Computer A sends the broadcast frame to **Switch 1**
+2. **Phase 2**
+	- Switch 1 sends the broadcast frame to **Switch 2**
+	- Switch 1 sends the broadcast frame to **Computer B**
+3. **Phase 3**
+	- Switch 2 sends the broadcast frame to **Computer C**
+	- Switch 2 sends the broadcast frame to **Computer D**
+	- Switch 3 sends the broadcast frame to **Switch 2**
+4. **Phase 4**
+	- <ins>Switch 2 sends the broadcast frame to Switch 1</ins> → **Loop!!!**
+
+![](images/broadcast_storm.png)
+
+> [!WARNING]
+> **Broadcast storm**
+>
+> The whole network will be caught up in a **never-ending loop of broadcasts**, which is known as a **broadcast storm**.
+> When this happens, the network **can't do anything** because of the **constant broadcasts**, and the entire network will **come to a grinding halt**.
+
+> [!TIP]
+> **The solution**
+>
+> This is why the **Spanning Tree Protocol** was developed: to **prevent broadcast storms** when **multiple switches** are used on a network.
+> STP solves this by **blocking certain ports on the switches**.
+
+**How does it determine which port or ports to block?**
+
+---
+#### Spanning Tree Protocol Step by Step
+
+##### Step 1: Which switch will be the root bridge?
+The **root bridge** is considered the **most important switch**.
+
+###### BPDU
+The way to determine which of the switches is the most important switch is by **sending out messages** called **BPDUs** (**Bridge Protocol Data Units**) on the network.
+
+###### BID
+These units contain information called the **BID** (**Bridge ID**). The bridge ID consists of the switch's:
+- **Priority number**
+- **VLAN ID**
+- **MAC address**
+
+![](images/stp_bpdu_exchange.gif)
+
+###### Electing the root bridge
+**The bridge with the lowest BID value will be elected as the root bridge.**
+
+> [!TIP]
+> **Example**
+>
+> - By default, each switch will have a **default priority number** like **32768**, and let's say that all the switches are on **VLAN 1**.
+> - The **BID equals the priority number + VLAN ID**, so each switch will be **32769**.
+> - Since each switch has the **same priority value**, there will be a **tie**.
+> - The **tie-breaker** is the **MAC address**: whichever switch has the **lowest MAC address** will be elected as the **root bridge**.
+
+![](images/electing_the_root_bridge.png)
+
+###### Designated Ports
+- The **ports on the root bridge** are labeled as **designated ports**.
+- Designated ports are ports that **lead away from the root bridge**.
+
+##### Step 2: Determine the root ports
+- The **root ports** are ports on the **non-root switches** (the switches that **forward data to the root bridge**).
+- Root ports are elected by what's called the **lowest path cost**, which means the port on the switch that has the **fastest link to the root bridge**.
+
+The path cost is calculated with the following chart:
+
+| Link speed | Path cost |
+| --- | --- |
+| **1 Gbps** | **4** |
+| **100 Mbps** | **19** |
+| **10 Mbps** | **100** |
+
+> [!TIP]
+> **Example**
+>
+> In our topology, **each link between the switches is 100 Mbps**. 100 Mbps has a **cost of 19**, so all three links will have a **path cost of 19**.
+>
+> **Switch 1** has two paths to reach Switch 3:
+> 1. Switch 1 → Switch 3 (cost **19**)
+> 2. Switch 1 → Switch 2 → Switch 3 (cost **38**)
+>
+> Since the path with the cost of 19 is less than the path with the cost of 38, the port on Switch 1 that is **directly linked to Switch 3** will be the **root port**.
+>
+> **The same thing goes for Switch 2:**
+> 1. Switch 2 → Switch 3 (cost **19**)
+> 2. Switch 2 → Switch 1 → Switch 3 (cost **38**)
+>
+> Since the path with the cost of 19 is less than the path with the cost of 38, the port on Switch 2 that is **directly linked to Switch 3** will be the **root port**.
+
+![](images/stp_root_port_selection_2x.gif)
+
+##### Step 3: Determine which of the remaining ports are going to be blocked
+- Which port will **remain open** and which one will be **blocked** is based on the **switches' bridge IDs**.
+- Since **Switch 2 has a smaller BID than Switch 1**, the port on **Switch 2 will remain open**, and the port on **Switch 1 will be blocked**, shutting down the link to **prevent any broadcast loops**.
+
+![](images/stp_blocked_port.gif)
+
+> [!NOTE]
+> If one of these **links or devices were to go down**, STP will **reactivate the blocked port** and **bring the link back up**.
+
+> [!NOTE]
+> **STP port roles**
+>
+> | Port | Where it is | How it's chosen |
+> | --- | --- | --- |
+> | **Designated port** | On the **root bridge** | All ports on the root bridge; they **lead away from the root bridge** |
+> | **Root port** | On the **non-root switches** | The **lowest path cost** (fastest link) to the root bridge |
+> | **Blocked port** | On one of the **remaining** links | The switch with the **smaller BID** keeps its port open; the other switch's port is **blocked** |
 
 [↑ Back to top](#networking)
 
@@ -1932,7 +2111,7 @@ When you set up a new Wi-Fi router, you can configure the **wireless settings** 
 - Instead of identifying a single access point, the ESSID stands for the **whole Wi-Fi network**.
 - This lets a Wi-Fi device **move between access points without losing its connection**.
 
-![](images/essid.png)
+![](images/essid_roaming.gif)
 
 ---
 #### Wireless Network Types
@@ -2066,12 +2245,12 @@ A **guest network** is a feature on modern Wi-Fi routers that allows **visitors 
 - The **most common** type of antenna.
 - It **transmits the signal in all directions**, so every wireless device in **all directions** can pick up the signal, as long as it's **in range**.
 
-![](images/omnidirectional_antenna.png)
+![](images/omnidirectional_antenna.gif)
 
 ##### Directional antenna
 - It **directs the signal in one direction**: **wherever you point the antenna**.
 
-![](images/directional_antenna.png)
+![](images/directional_antenna.gif)
 
 ---
 #### Access Points
@@ -2227,7 +2406,7 @@ Buildings that contain a lot of **server and networking equipment**, such as **d
 - A **clean agent system** like **FM200** is often chosen, because it's **safe for electrical equipment**.
 - **Sprinkler systems** can also be used, but they are often used **together with gas suppression** to **improve their effectiveness**.
 
-![](images/fire_suppression.png)
+![](images/fire_suppression.gif)
 
 [↑ Back to top](#networking)
 
@@ -2430,7 +2609,7 @@ SNMP has **two major components**:
 ###### Requests and traps
 - **Request:** if the SNMP manager wants information about a certain device, it can **talk to that device's SNMP agent** and get the information that's **stored in the device's MIB**. When the SNMP manager sends a request, it uses **port 161** and the **UDP** protocol.
 
-![](images/requests_and_traps.png)
+![](images/snmp.gif)
 
 - **Trap:** if something happens on the network, such as a **link or device failure**, the SNMP agent will **proactively send a message** to the SNMP manager to **notify it of the event**. This message is known as a **trap**. The SNMP agent uses **port 162** to send traps.
 
@@ -2505,7 +2684,7 @@ SNMP comes in **three versions**:
 - Syslog works by using a **centralized syslog server or collector**. This server **receives syslog messages** from many different devices, such as **routers, switches, servers, and applications**.
 - Syslog messages inform network administrators about **activity**, **security incidents**, and **application issues**, which helps them **keep an eye on, fix, and keep their systems running smoothly**.
 
-![](images/syslog.png)
+![](images/syslog_log_aggregation.gif)
 
 ---
 ##### SIEM
@@ -2682,20 +2861,20 @@ If a natural disaster were to occur, your goal would be to **get your organizati
 >
 > Hot sites can be **very expensive**, because you have to pay not only for the **cost of the building**, but also for the **cost of replicating the equipment** inside.
 
-![](images/hot_site.png)
+![](images/hot_site.gif)
 
 ##### Warm Site
 - A warm site is also an **alternative site** that is used in case of a disaster.
 - It's different from a hot site because it **doesn't have that much equipment**. It may have a **small portion of the computer equipment** that the primary site has, but that's about it.
 - It's basically a site you can go to, to get the **bare essentials** of an organization **up and running**.
 
-![](images/warm_site.png)
+![](images/warm_site.gif)
 
 ##### Cold Site
 - A cold site is pretty much just a **location that is agreed upon** in case of a disaster.
 - It's basically **just a building** with **no computer equipment**.
 
-![](images/cold_site.png)
+![](images/cold_site.gif)
 
 ---
 #### High Availability
@@ -2870,7 +3049,7 @@ It works by using **router advertisements** that **come from the router** and **
 ##### Same subnet
 When a computer **needs an IP address**, it **broadcasts a request** to a DHCP server. If the server is on the **same subnet** as the computer, the DHCP server will **receive the request** and **assign the computer an IP address**.
 
-![](images/same_subnet.png)
+![](images/dhcp_same_subnet.gif)
 
 ##### Different subnets
 > [!WARNING]
@@ -2891,7 +3070,7 @@ This is where a **DHCP relay** comes in.
 3. The relay **forwards the broadcast to the DHCP server**.
 4. The server **assigns the computer an IP address**.
 
-![](images/different_subnets.png)
+![](images/dhcp_relay.gif)
 
 [↑ Back to top](#networking)
 
@@ -2939,7 +3118,7 @@ There are **3 main levels of servers**:
 3. The top-level domain server **forwards the query to the specific authoritative name server** that's responsible for the example.com domain.
 4. Once the query **reaches the name server**, example.com is **resolved to the IP address**, so the website can be retrieved.
 
-![](images/dns_hierarchy.jpg)
+![](images/dns_resolution.gif)
 
 ---
 #### DNS Records
@@ -3094,5 +3273,706 @@ The **MX** (**Mail Exchange**) record is **used for email**. It simply **points 
 **NTS** is a protocol that **makes NTP safer**, by making sure that **time synchronization between clients and servers** is both **encrypted and verified**.
 
 ![](images/nts.png)
+
+[↑ Back to top](#networking)
+
+## VPN & remote access
+
+### VPN & Connection Methods
+
+#### VPN
+> [!NOTE]
+> **Definition**
+>
+> **VPN** stands for **Virtual Private Network**. A VPN is what establishes a **secure and reliable network connection** over an **unsecured network**, such as the **internet**.
+> It **protects your internet activity** and **disguises your identity** as you surf the internet.
+
+##### Why you would use a VPN
+When you order internet service from your **ISP** (**Internet Service Provider**), they will **set up your internet connection**.
+- When your setup is complete, your internet activity is **routed through your ISP's servers**, which means that your ISP can **see and log all of your internet activity**. So they can see **every website that you visited**.
+- Typically this wouldn't be a problem if they **kept your internet activity private**.
+
+> [!WARNING]
+> However, there is a possibility that your ISP could **share your information with third parties**, such as **advertisers** or maybe even the **government**. If this were to happen, your internet activity would **no longer be private**.
+
+![](images/why_you_would_use_a_vpn.jpg)
+
+By **using a VPN**, your online activity will **no longer go straight from your ISP to the website**. Instead, it will be **redirected to another server**, which is a **VPN server**. This means that your **internet provider or any other party** can **no longer see what websites you are visiting**.
+
+![](images/why_you_would_use_a_vpn.png)
+
+##### Without vs. with a VPN
+**Without a VPN:**  
+You → ISP → website (YouTube)
+
+- Your ISP sees the **IP address you're connecting to** (YouTube's) and usually the **domain name** too, from your **DNS requests** and the **fields in the TLS handshake**. So it **knows you're on youtube.com**.
+- The **exact content** (which video, which page) is **hidden by HTTPS**.
+
+**With a VPN:**  
+You → ISP → **VPN server** → website (YouTube)
+
+- Your traffic **still goes through the ISP** to reach anything on the internet.
+- But the VPN app creates an **encrypted tunnel** between **your device and the VPN server** _before_ the packets **leave your machine**.
+- Each **original packet** (destined for youtube.com) is **wrapped inside another encrypted packet** addressed to the **VPN server**.
+
+##### Benefits of a VPN
+The **VPN server** is now **your source**, where **all of your internet activity goes through**. This has **several benefits**.
+
+###### 1. It hides your IP address
+The first benefit is that a VPN will **disguise your identity** by **hiding your IP address**.
+- Whenever you order internet service from a provider, they will **assign you an IP address**.
+- That **unique IP address** is **attached to your home or business**.
+- So whenever you visit a website, **that website can see your IP address**.
+
+| | Without a VPN | With a VPN |
+| --- | --- | --- |
+| **Websites see** | **Your IP address** | Only the **IP address of the VPN server** |
+
+When using a VPN, websites **can no longer see your IP address**, which effectively **hides your identity**, so you can **surf the internet anonymously**.
+
+###### 2. It encrypts and protects your internet data
+Another benefit is that a VPN will **encrypt and protect your internet data**.
+- Whenever you go on the internet, the data that you send and receive is **broken down into a bunch of smaller data packets**.
+- These data packets **travel across the public internet** and ultimately find their way to their **destination**.
+
+> [!WARNING]
+> As they are traveling across the internet, your data **can be viewed by ISPs and governments**, and it can also be **intercepted by hackers**, especially if you use **public Wi-Fi networks**.
+
+![](images/vpn_data_intercepted.gif)
+
+A VPN will **prevent this**.
+
+> [!NOTE]
+> **Tunneling**
+>
+> A VPN will **encapsulate each data packet** by **adding an extra layer of protection** to each one, which is known as **tunneling**.
+
+- This extra layer ensures your data is **secure and kept private** as it travels across the internet in a **virtual tunnel**.
+- So for any activity that you do on the internet, such as **visiting web pages** or **transferring files**, the data is **encrypted and kept private** when using a VPN.
+
+![](images/vpn_virtual_tunnel.gif)
+
+---
+#### Types of VPN
+
+##### Site-to-site VPN
+One type of VPN is called **site-to-site**. This is when an organization has **two offices in different geographical locations**, and it wants those offices to be **networked and share data with each other over the public internet**.
+
+**How it works:**
+1. The organization would just need to **set up a site-to-site VPN connection**.
+2. The VPN will **encrypt the data** as it **goes through the internet**.
+3. The VPN then **decrypts the data** as it **enters the organization's private network**.
+
+> [!TIP]
+> Creating a site-to-site VPN is an **alternative to an internet leased line**, at a **much cheaper cost**.
+
+![](images/site_to_site_vpn.png)
+
+##### Client-to-site VPN
+- A **client-to-site VPN**, also known as a **point-to-site VPN**, **securely connects a single computer to a remote network**, such as a **remote office**.
+- Once it's connected, the computer can **use the network resources and services** as if it was **physically in the same office**.
+
+![](images/client_to_site_vpn.png)
+
+###### Full Tunneling vs. Split Tunneling
+In client-to-site VPNs, there's **full tunneling** and **split tunneling**.
+
+| | Full tunneling | Split tunneling |
+| --- | --- | --- |
+| **Traffic through the VPN** | **All** user traffic | Users **pick which traffic** travels through the VPN |
+| **Encryption** | **All the data** is encrypted | Only a **portion** of the traffic is encrypted |
+| **Pros** | **Safer** | **More flexible** and **may increase performance** |
+| **Cons** | Can **slow down performance**, because it **adds latency** | Could make your VPN **less secure**, because **some traffic goes around it** |
+
+###### Full Tunneling
+- Full tunneling **sends all user traffic through the VPN**.
+- In full tunneling, **all the data is encrypted**, which makes it **safer**, but it can also **slow down performance** because it **adds latency**.
+
+![](images/vpn_full_tunneling.gif)
+
+###### Split Tunneling
+- Split tunneling **lets users pick which traffic travels through the VPN**.
+- Only **a portion of the traffic is encrypted**, such as the **traffic going to a remote network**, but **all the other traffic**, such as **traffic for the internet only**, is **not encrypted**.
+- This option is **more flexible** and **may increase performance**, but it could also make your VPN **less secure**, because **some traffic goes around it**.
+
+![](images/vpn_split_tunneling.gif)
+
+##### Clientless VPN
+- A **clientless VPN** is a type of VPN that lets users **connect their computers to a remote network** **without having to install any specific software or apps** on their devices.
+- Instead, it uses a **web browser**, with protocols like **SSL and TLS**, to make the connection.
+
+![](images/clientless_vpn.png)
+
+> [!NOTE]
+> **Types of VPN**
+>
+> | Type | What it connects | How |
+> | --- | --- | --- |
+> | **Site-to-site** | **Two offices** in different geographical locations | Over the **public internet**; data is encrypted on the way and decrypted as it enters the private network |
+> | **Client-to-site** (point-to-site) | A **single computer** to a **remote network** | **Full** or **split** tunneling |
+> | **Clientless** | A **computer** to a **remote network** | Through a **web browser** (SSL/TLS), **no software to install** |
+
+---
+#### Connection Methods
+There are **several ways** that a **connection to a network** can be made.
+
+##### SSH
+- One of those ways is by using **SSH** (**Secure Shell**). This way of connecting lets you use a **command line interface** to **safely access and administer network devices from a distance**.
+- Users would **type commands into a terminal window** to **talk to network devices**.
+- SSH **encrypts data** as it's sent, **verifies users with passwords**, and lets people **access computers remotely over networks securely**.
+- Users often use it to **manage network devices** such as **routers and switches** remotely.
+- SSH uses **TCP port 22** for its connection.
+
+![](images/ssh.png)
+
+##### GUI
+- A network connection can also be made by using a **GUI** (**Graphical User Interface**).
+- This provides a **user-friendly way** to **connect, control, and change network settings**, such as:
+	- **connecting to a wired or wireless network**
+	- **setting up IP addresses**
+	- **setting up VPNs**
+- It lets you do all these things in a **friendly, visual fashion**, as opposed to using **command line tools**.
+
+![](images/gui.png)
+
+##### API
+- **API integration** is the practice of **linking a couple of software applications via APIs** to provide a **seamless exchange of data**.
+- APIs serve as a **middleman**, outlining **how various software components should interact and communicate** with one another.
+
+![](images/api.png)
+
+##### Console Connection
+- A **console connection** is a **physical serial connection** that uses a **serial cable**, such as an **RJ-45, USB, or DB-9** connection.
+- It lets you **directly access a network device's command line interface**, for things such as **troubleshooting** or doing the **initial setup** when the device **hasn't joined the network yet**.
+
+> [!NOTE]
+> This feature is important for **routers and switches** that **don't have an IP address**.
+
+![](images/console_connection.png)
+
+##### Jumpbox
+- A **jumpbox**, also called a **jump server** or **jump host**, is a **computer** that lets you **securely access other servers or networks** in a **more limited security zone**.
+- It operates as a **gateway**, letting users **access internal systems** while **keeping those systems safe from direct access from outside**.
+
+![](images/jumpbox.png)
+
+> [!NOTE]
+> **Connection methods at a glance**
+>
+> | Method | How the connection is made | Used for |
+> | --- | --- | --- |
+> | **SSH** | **Command line interface** in a terminal window, **encrypted**, **TCP port 22** | Managing network devices such as **routers and switches** remotely |
+> | **GUI** | **Graphical, visual** interface | **Connecting, controlling, and changing** network settings |
+> | **API** | **Software applications linked via APIs** | A **seamless exchange of data** |
+> | **Console connection** | **Physical serial cable** (RJ-45, USB, DB-9) | **Troubleshooting** and **initial setup**, devices **without an IP address** |
+> | **Jumpbox** | A **gateway** computer | **Securely accessing** servers or networks in a **more limited security zone** |
+
+---
+#### In-Band Management vs. Out-of-Band Management
+There are **two methods** for **managing devices in a network**: **in-band** and **out-of-band**. They differ mainly in **how the connection is made**.
+
+| | In-band management | Out-of-band management |
+| --- | --- | --- |
+| **Network infrastructure** | **Shares the same** network infrastructure | **Doesn't use the same** network infrastructure |
+| **How you connect** | The device is **assigned an IP address**, and an administrator **logs in using SSH** | A **direct connection** to the device, using its **console port** |
+
+##### In-band management
+- In-band management **shares the same network infrastructure** to make the connection.
+- The network device will be **assigned an IP address**, which an administrator can use to **log into and access that device using SSH**.
+
+![](images/in_band_management.png)
+
+##### Out-of-band management
+- Out-of-band management **doesn't use the same network infrastructure** to make the connection.
+- Instead, it uses a **direct connection to the device**, using the **device's console port**.
+
+![](images/out_of_band_management.png)
+
+[↑ Back to top](#networking)
+
+## Security
+
+### Network Security Concepts
+
+#### Encryption & Certificates
+
+##### Encryption
+One of the **most common types of security** is **encryption**.
+
+> [!NOTE]
+> **Definition**
+>
+> **Encryption** is a method to **make data unreadable** by **scrambling the data** using **encryption algorithms**.
+
+| | Data in transit | Data at rest |
+| --- | --- | --- |
+| **Meaning** | The data is **moving over a network** to a different location | The data is **not moving** and is **stored somewhere** |
+| **Why encrypt it** | So it **can't be read by hackers** if they **intercept** the information | To **keep it safe from hackers** |
+
+- Encryption is **essential to security**, because as the data is **in transit**, that data needs to be **protected by encryption**, so it **can't be read by hackers** if they intercept the information.
+
+![](images/encryption.png)
+
+- The same is true if the data is **at rest**. This data **also has to be encrypted** to keep it **safe from hackers**.
+
+> [!TIP]
+> This ensures that the data is **safe** and **only people with the decryption key can read it**.
+
+![](images/encryption_2.png)
+
+##### PKI
+- **PKI** (**Public Key Infrastructure**) is a way to make sure that **people are who they say they are** and that their **communications are safe**. This is done by using **digital certificates** and **public key encryption**.
+- It's a system that lets **people and devices check each other's identities** and **encrypt data**, so that it can be **safely sent over a network**.
+- Basically, it's used to let your computer know that **the website you're visiting is trustworthy**.
+
+**How it works when a computer connects to a website:**
+1. The computer's **web browser asks the website to identify itself**.
+2. The web server **sends the computer a copy of its certificate**.
+3. The computer's browser **checks that it trusts the certificate**, and if it does, it **sends a message to the web server**.
+4. The web server **responds with an acknowledgement**, so a **session can proceed**.
+5. After all these steps are complete, **encrypted data can now be exchanged** between your computer and the web server.
+
+![](images/pki.png)
+
+##### CA
+- A certificate is **issued by a CA** (**Certificate Authority**).
+- **Browsers and systems trust CA certificates by default**, which makes sure the **connection is secure** and shows a **security icon**, such as a **padlock**, in the web browser.
+
+![](images/ca.png)
+
+##### Self-Signed
+- There are also **self-signed certificates**.
+- Self-signed certificates are **not automatically trusted**, and will give you the option of **manually clicking a button to accept the certificate**, so you can proceed to the website.
+
+![](images/self_signed.png)
+
+> [!NOTE]
+> **CA vs. self-signed certificates**
+>
+> | | CA certificate | Self-signed certificate |
+> | --- | --- | --- |
+> | **Trusted by default?** | **Yes**, by browsers and systems | **No** |
+> | **In the web browser** | Shows a **security icon**, such as a **padlock** | You **manually click a button to accept** the certificate |
+
+---
+#### Identity & Access
+
+##### IAM
+> [!NOTE]
+> **Definition**
+>
+> **IAM** (**Identity and Access Management**) is a **security framework** that deals with **keeping track of digital identities** and **controlling who can access an organization's resources**.
+
+- It makes sure that the **right people and systems** can get to the **right resources** at the **right time**.
+- IAM includes **rules, tools, and methods** for **verifying users**, **giving them permission**, and **controlling their access**.
+
+![](images/iam.png)
+
+##### LDAP
+- **LDAP** (**Lightweight Directory Access Protocol**) is a **standard way to get to and manage directory services**.
+- It lets **clients talk to directory servers**, like **Active Directory**, to do things like **search for information**, **verify users**, and **change directory entries**.
+- LDAP is an **important part of many network and application settings**.
+
+![](images/ldap.png)
+
+##### Authentication & MFA
+> [!NOTE]
+> **Authentication**
+>
+> **Verifying the identity** of a person, thing, or method to make sure **they are who they say they are** is called **authentication**.
+
+- It's an important part of security that usually **comes before authorization**, which **limits the resources that a verified person can access**.
+- Authentication **checks that identities**, such as **usernames and passwords**, **are real**.
+- For **extra security**, it can also use **MFA** (**Multi-Factor Authentication**).
+
+| | Authentication | Authorization |
+| --- | --- | --- |
+| **What it does** | **Verifies the identity** of a person, thing, or method | **Limits the resources** that a verified person can access |
+| **Order** | Comes **first** | Comes **after** authentication |
+
+**MFA:**
+- MFA is a security system that asks users to **prove their identity in at least two ways** before they can **access a resource or account**.
+- It makes it **harder for people who aren't supposed to be there** to get into accounts, because it **adds another layer of security** on top of a **username and password**.
+
+![](images/authentication_mfa.png)
+
+##### SSO
+- **SSO** (**Single Sign-On**) is a way for users to **log into several apps or websites** with **just one set of credentials**.
+- Since people often use their **web browsers to access apps directly**, companies are putting in place **access management strategies** that make **both security and the user experience a priority**.
+- SSO **provides both**, since users can **access all password-protected resources** **without having to log in again** after their identity has been verified.
+
+![](images/sso.png)
+
+##### TACACS+
+**TACACS+** (**Terminal Access Controller Access-Control System Plus**) is a network protocol that is **widely used in Cisco systems** to provide **centralized authentication, authorization, and accounting** for **users and devices** on the network.
+
+---
+#### Physical Security & Deception
+
+##### Physical Security
+Another aspect of security is **physical security**. This includes things such as:
+- **Security cameras** inside and outside a building. Cameras are a great way to **protect property** and **deter crime**.
+- These camera systems will also include **motion detection** to **alert you of a pending danger**.
+- **Locks** are also essential to **restrict access** and **protect personal property from theft**.
+
+![](images/physical_security.png)
+
+##### Honeypot & Honeynet
+There are also some **deceptive technologies** that are used in cybersecurity, such as the **honeypot** and the **honeynet**.
+
+> [!NOTE]
+> **Honeypot**
+>
+> A **honeypot** is a **deceptive mechanism** used to **draw in and catch cyber criminals**, so that security personnel can **examine their strategies** and **better prepare their defenses**.
+
+- It serves as a **safe haven** where **malicious activity can be observed, examined, and learned from**, **without posing a threat to a real network**.
+- A **honeynet** is a **network of honeypots**.
+
+![](images/honeypot.gif)
+
+---
+#### Security Risks & Models
+
+##### Risk
+- A **risk** is a **potential for something bad to happen**.
+- Risk is the **uncertainty of how an action will affect something that you value**, such as **money, health, property**, and so on.
+
+##### Vulnerability
+In terms of cybersecurity, a **vulnerability** is a **weakness or flaw** in **software, hardware, or security measures** that could be **used by hackers** to **compromise data** or **start an attack**.
+
+##### Exploit
+- An **exploit** is a technique used in cybersecurity to **benefit from a vulnerability or security hole** in a computer system or application.
+- It's a technique to **hack into a system** by **taking advantage of a known flaw** to **obtain access**.
+
+##### Threat
+- A **cybersecurity threat** is a **possible bad action or incident** that could **harm computer systems and a network**.
+- These threats **mostly come from outside the company**, but they **can also come from within**.
+- These include things such as **viruses**, **malware**, **phishing attacks**, **ransomware**, and **spyware**.
+
+> [!NOTE]
+> **Risk vs. vulnerability vs. exploit vs. threat**
+>
+> | Term | Meaning |
+> | --- | --- |
+> | **Risk** | The **potential for something bad to happen** |
+> | **Vulnerability** | A **weakness or flaw** that could be used by hackers |
+> | **Exploit** | A technique that **takes advantage of a vulnerability** to obtain access |
+> | **Threat** | A **possible bad action or incident** that could harm systems and a network |
+
+##### CIA Triad
+The **CIA triad** is one of the **most important models in information security**. It stands for **three main ideas**:
+1. **Confidentiality**
+2. **Integrity**
+3. **Availability**
+
+The CIA triad acts as a **guide** in helping people **make security rules and policies** that **keep data and a network safe**.
+
+---
+#### Data & Compliance
+
+##### Data Locality
+- **Data locality** means **doing calculations on the same computer where the data is stored**.
+- This keeps data from **having to move around too much** in a network.
+- This method is especially important in systems that **handle large amounts of data**, because **moving data between computers** can **slow things down** and cause **network congestion**.
+
+> [!TIP]
+> Data locality **reduces network traffic** and **speeds up processing**.
+
+##### PCI DSS
+- Companies that **deal with credit cards** must follow what's called the **PCI DSS** (**Payment Card Industry Data Security Standard**) when they **handle customer data**.
+- It's made to **keep user data safe** while it's being **processed, sent, and stored**.
+- **Any business** that **takes credit card data, processes it, or saves it** must follow this standard.
+
+##### GDPR
+**GDPR** (**General Data Protection Regulation**) is a **law in the European Union** that controls how **sensitive information about people** is **gathered, used, and kept safe**.
+
+> [!NOTE]
+> **PCI DSS vs. GDPR**
+>
+> | | PCI DSS | GDPR |
+> | --- | --- | --- |
+> | **What it is** | A **standard** for companies that deal with **credit cards** | A **law** in the **European Union** |
+> | **What it protects** | **User data** while it's processed, sent, and stored | **Sensitive information about people**: how it's gathered, used, and kept safe |
+
+---
+#### Devices & Industrial Systems
+
+##### IoT / IIoT
+The **industrial internet of things** and the **internet of things** are both **networks of devices that are linked together**, but they are **used for different things** and have **different areas of coverage**.
+
+| | IoT | IIoT |
+| --- | --- | --- |
+| **Full name** | Internet of Things | Industrial Internet of Things |
+| **Network of** | **Everyday devices** connected to the internet | **Connected industrial devices and processes** |
+| **Examples** | Things the **common person** would use, such as **smart devices** | **Machinery**, **transportation**, **energy**, and so on |
+
+**IoT:** the internet of things is the network of **everyday devices** that are **connected to the internet**, such as the things that the **common person** would use, like **smart devices**.
+
+![](images/iot_iiot.png)
+
+**IIoT:** the industrial internet of things, on the other hand, is a network of **connected industrial devices and processes**, such as **machinery, transportation, energy**, and so on.
+
+![](images/iot_iiot_2.png)
+
+##### SCADA / ICS / OT
+**SCADA, ICS, and OT** are **similar terms** that describe systems used for **controlling and monitoring equipment** in **industrial facilities**, such as **power plants**, **water treatment plants**, and **refineries**.
+
+**How they work:**
+1. These systems **communicate in real time** with **sensors and systems** that are **out in these industrial facilities**.
+2. Those sensors and systems **send information back to PLCs and RTUs**.
+3. The PLCs and RTUs then **send it to the SCADA computers** to be **analyzed**.
+
+This information could be things like **how to reduce waste**, **how to improve efficiency**, or **whether there are any problems**.
+
+![](images/scada_ics_ot.png)
+
+##### BYOD
+Employees who **bring their own network devices**, such as **smartphones, tablets, or laptops**, and use them for **job-related tasks** can do so through a program called **BYOD** (**Bring Your Own Device**).
+
+> [!TIP]
+> **Benefit**
+>
+> This program can **save a company money**, because it **wouldn't have to purchase and maintain these items** for its employees.
+
+> [!WARNING]
+> **Risk**
+>
+> However, it could **create a security risk**, for example **if the employee devices have malware installed**.
+
+[↑ Back to top](#networking)
+
+---
+
+### Types Of Attacks
+
+#### Network Attacks
+
+##### DDoS
+> [!NOTE]
+> **Definition**
+>
+> **DDoS** stands for **Distributed Denial of Service**. It's basically a **cyber attack on a specific server or network**, with the intended purpose of **disrupting that network or server's normal operation**.
+
+**How it works:**
+1. The attack **floods the targeted network or server** with a **constant bombardment of traffic**, such as **fraudulent requests**.
+2. This **overwhelms the system**.
+3. The result is a **disruption**, or **denial of service**, to **legitimate traffic**.
+
+![](images/ddos.gif)
+
+##### VLAN Hopping
+- **VLAN hopping** is also an attack on a network. It occurs when a hacker **attempts to access VLANs** that they are **not authorized to access**.
+- In addition to posing a **substantial threat to network security**, this attack **weakens the isolation** that was expected to exist **between various VLANs**.
+
+![](images/vlan_hopping.gif)
+
+##### MAC Flooding
+Another type of attack is **MAC flooding**.
+
+**Normally:** whenever a device **connects to a port on a switch**, the switch will **enter that device's MAC address in its table**. That way, the switch will **know which port to forward the data to**.
+
+**During the attack:**
+1. A hacker **overwhelms the switch** by **flooding its MAC address table with fraudulent entries**.
+2. When this happens, the switch will **default to fail-open mode**.
+
+> [!WARNING]
+> **Fail-open mode**
+>
+> **Fail-open mode** is basically when a switch **turns into a hub** and starts **forwarding traffic to every port**, which could **slow down a network** and potentially **open the door for hackers to intercept data**.
+
+![](images/mac_flooding.gif)
+
+##### ARP Spoofing
+**ARP** (**Address Resolution Protocol**) can also be **used as an attack on a network**.
+
+###### How ARP normally works
+Whenever a device on a network wants to **communicate with another device** on the network, it **needs the MAC address of that device**. For example, if a **computer** wants to communicate with a **router**:
+1. The computer **sends out a broadcast** using the **router's IP address**, **asking for the router's MAC address**.
+2. The router **responds back**, telling the computer **its MAC address**.
+3. The computer **stores the IP address** along with the **corresponding MAC address** in its **ARP cache**.
+
+![](images/arp_normal.gif)
+
+So now, anytime the computer wants to talk to the router, it **knows the MAC address**, because it's **stored in its ARP cache**.
+
+###### The attack
+If a hacker on the network wanted to **intercept data between the computer and the router**, the hacker can do an **ARP spoofing** attack.
+
+> [!NOTE]
+> **Definition**
+>
+> **ARP spoofing** is when a device **impersonates another device** in order to **intercept and steal data**.
+
+1. The **hacker's computer responds to the computer** and tells it that the router it wants to talk to has a **different MAC address**.
+2. The computer **stores the updated MAC address** in its ARP cache, **thinking it's the MAC address of the router**. But in reality, it's the **MAC address of the hacker's computer**.
+3. Any data coming from the computer **goes to the hacker's computer first**, which then **forwards the data to the router**.
+4. So whenever the computer wants to communicate with the router, it's **actually communicating with the hacker's computer first**. The hacker can now **see all the communication** between the computer and the router.
+
+> [!NOTE]
+> **On-path attack**
+>
+> Since the hacker is now **in the path of these two devices**, this is also known as an **on-path attack** or **man-in-the-middle attack**.
+
+![](images/arp_spoofing.gif)
+
+##### DNS Poisoning
+> [!NOTE]
+> **Definition**
+>
+> **DNS poisoning**, or **DNS spoofing**, is a type of attack that **changes DNS data** to **send people to harmful websites**.
+
+As covered in [DNS, DNS Records & Protocols](#dns-dns-records--protocols), DNS is what **resolves a domain name to an IP address**.
+1. Hackers **get into a DNS server or a DNS cache** and **change or add fake DNS records**.
+2. These fake records **lead people to a bad website** that **looks like a real one**.
+
+> [!TIP]
+> **Example**
+>
+> If you wanted to go to a certain website by **typing it into your web browser**, and the web browser **took you to a totally different website**, this is the **result of DNS poisoning**.
+
+![](images/dns_poisoning.gif)
+
+---
+#### Rogue Devices & Services
+There are also **rogue devices and services** that can **disrupt a network**.
+
+##### Rogue DHCP
+- A **rogue DHCP server** is an **unauthorized server** that can **interfere with network security**.
+- These servers are frequently installed on networks either **accidentally** or **by hackers**.
+- A rogue DHCP server can **duplicate IP addresses**, which can **block devices from connecting to the network**, or it could be used for a **man-in-the-middle attack**.
+
+![](images/rogue_dhcp.gif)
+
+##### Rogue AP
+- Another device that can cause disruption on a network is a **rogue AP**. This is when a **bad actor places a wireless access point on a secure network**, with the **intent of stealing a user's data** when that person **joins the rogue AP**.
+- The **SSID name** that the rogue AP broadcasts **may look legit and secure** to others, but if they **join the wireless network**, they could **get their data stolen**.
+
+> [!WARNING]
+> **Evil twin attack**
+>
+> If the rogue AP **broadcasts the same SSID as a legitimate AP**, this is known as an **evil twin attack**. The purpose is to **trick users into connecting to the rogue AP** instead of the legitimate one.
+
+![](images/rogue_ap_evil_twin.gif)
+
+---
+#### Physical Attacks
+
+##### Dumpster Diving
+- **Dumpster diving** is another type of attack that involves the **retrieval of items that were discarded in the trash**.
+- Those things can be **physical**, such as **on paper**, or **digital data**, such as what is **stored on storage drives**.
+- If this information is recovered, it can be used to **steal personal information** and be **used for fraud**.
+
+![](images/dumpster_diving.gif)
+
+##### Shoulder Surfing
+- If someone **takes your personal information**, such as a **PIN or password**, by **watching you enter it**, this is called **shoulder surfing**.
+- This can typically happen where people **enter private information**, like at an **ATM** or a **computer**.
+- This kind of **identity theft** is **pretty simple to do in public places**.
+
+![](images/shoulder_surfing.gif)
+
+##### Tailgating
+- **Tailgating** is an attack where a **physical breach** can happen.
+- It happens when a person **follows another person into a restricted area** and **bypasses security**.
+- From there, that **unauthorized person** can **observe sensitive information** that could **cause harm to an organization**.
+
+![](images/tailgating.gif)
+
+---
+#### Phishing & Malware
+
+##### Phishing
+- **Phishing** is a **very common type of internet fraud** in which criminals **try to fool people into giving private information**, such as **credit card numbers**, **passwords**, and other personal information.
+- They do this by **posing as a legitimate company or person**.
+- A lot of times this happens through things such as **emails**, **chat services**, **websites**, and so on.
+
+![](images/phishing.gif)
+
+##### Malware
+- **Malware** stands for **malicious software**. This is software that's **intended to damage or take advantage of computer systems** in a network.
+- Malware includes things such as **viruses**, **trojan horses**, **worms**, **ransomware**, and **spyware**.
+- Typically, malware **accesses computers** through **email attachments** and **malicious websites**.
+
+![](images/malware.png)
+
+---
+> [!NOTE]
+> **Types of attacks at a glance**
+>
+> | Attack | What happens |
+> | --- | --- |
+> | **DDoS** | **Floods** a server or network with traffic until it **denies service** to legitimate traffic |
+> | **VLAN hopping** | A hacker **accesses VLANs** they are **not authorized** to access |
+> | **MAC flooding** | **Fraudulent entries** flood a switch's MAC address table, so it **fails open** and acts like a **hub** |
+> | **ARP spoofing** | A device **impersonates another device** (on-path / man-in-the-middle) |
+> | **DNS poisoning** | **Fake DNS records** send people to **harmful websites** |
+> | **Rogue DHCP** | An **unauthorized DHCP server** duplicates IP addresses or is used for a man-in-the-middle attack |
+> | **Rogue AP / evil twin** | A **fake wireless access point** steals the data of users who join it |
+> | **Dumpster diving** | **Discarded items** are retrieved from the trash and used for fraud |
+> | **Shoulder surfing** | Someone **watches you enter** a PIN or password |
+> | **Tailgating** | Someone **follows another person** into a restricted area |
+> | **Phishing** | Criminals **pose as a legitimate company or person** to get private information |
+> | **Malware** | **Malicious software** that damages or takes advantage of computer systems |
+
+[↑ Back to top](#networking)
+
+## Performance
+
+### Common Performance Issues
+
+#### Congestion
+It happens when a shared resource is at capacity, which can cause performance problems such as:
+- poor network speeds
+- drppped packets
+
+#### Contention
+Happens when too many devices are accessing the same resource. Those devices are essentially fighting or contending with each other over that resource. When this happens it can cause:
+- delays
+- network to shut down
+
+To fix this issues a network arhitecture can:
+- improve the network architecture
+- optimize traffic flow by using mechanisms such as traffic shaping and priority scheduling
+- making more resources available
+
+#### Bottleneck
+The term is used when there is a point on the network where data flow is hindered and it's causing a data traffic jam. Bottleneck can happen in different areas in a network such as:
+- hardware
+- bandwidth
+- links that are too busy
+
+Finding and fixing bottlenecks is very important for keeping a network running at its best.
+
+#### Bandwidth
+The term bandwitdth refers to the maximum amount of data that can be sent over a network connection in a certain legth of time. It is usually measured in bits per second or bps such as megabits per second or gigabits per second.
+
+It tells you how much data a network conneciton can carry which affects things like download speeds, video streaming quality, and how well the network performs overall.
+
+Example:
+If you have 100 megabits per second internet connection, that means that a maximum of 100 megabits of data can be transferred in 1 second
+If you have 500 megabits per second internet connection, that means that a maximum of 500 megabits of data can be transferred in 1 second
+
+As an analogy we can think of water going through a pipe and depending upon the diameter of the pipe it will directly affect how much water can flow through it. 
+The smaller diameter pipe will represent a lower bandwidth connection.
+The larger diameter pipe will represent a higher bandwidth connection.
+
+The flow of water is traveling at the same rate in both pipes. Since the bottom pipe is wider than the top one, it's able to flow a lot more water at the same time more than a smaller pipe which can fill up the container at the other end a lot faster.
+![](images/bandwidth_pipes.gif)
+
+#### Latency
+The time it takes for a network to respond to a user's action is called network latency or lag.
+It is very important for networking performance especially for things that need to happen quickly such as internet gaming, video conferencing, and monet transfers.
+
+Latency can be caused by things such as:
+- network congestion
+- distance
+- server side issues
+- network hardware limitations
+
+Latency is usually measured in milliseconds.
+![](images/latency.gif)
+
+#### Packet Loss
+When one or more
 
 [↑ Back to top](#networking)
