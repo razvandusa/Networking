@@ -176,12 +176,17 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
 
 **Performance**
 - [Common Performance Issues](#common-performance-issues)
-  - [Congestion](#congestion)
-  - [Contention](#contention)
-  - [Bottleneck](#bottleneck)
-  - [Bandwidth](#bandwidth)
-  - [Latency](#latency)
-  - [Packet Loss](#packet-loss)
+  - [Network Traffic Issues](#network-traffic-issues)
+  - [Performance Measures](#performance-measures)
+  - [Wireless Issues](#wireless-issues)
+
+**Tools & commands**
+- [Software/Hardware Tools & Commands](#softwarehardware-tools--commands)
+  - [Command Line Tools](#command-line-tools)
+  - [Show Commands](#show-commands)
+  - [LLDP / CDP](#lldp--cdp)
+  - [Cable Tools](#cable-tools)
+  - [Network Testing & Monitoring Tools](#network-testing--monitoring-tools)
 
 ## Fundamentals
 
@@ -3920,59 +3925,468 @@ There are also **rogue devices and services** that can **disrupt a network**.
 
 ### Common Performance Issues
 
-#### Congestion
-It happens when a shared resource is at capacity, which can cause performance problems such as:
-- poor network speeds
-- drppped packets
+#### Network Traffic Issues
 
-#### Contention
-Happens when too many devices are accessing the same resource. Those devices are essentially fighting or contending with each other over that resource. When this happens it can cause:
-- delays
-- network to shut down
+##### Congestion
+**Congestion** happens when a **shared resource is at capacity**, which can cause performance problems such as:
+- **poor network speeds**
+- **dropped packets**
 
-To fix this issues a network arhitecture can:
-- improve the network architecture
-- optimize traffic flow by using mechanisms such as traffic shaping and priority scheduling
-- making more resources available
+##### Contention
+**Contention** happens when **too many devices are accessing the same resource**. Those devices are essentially **fighting, or contending, with each other** over that resource.
 
-#### Bottleneck
-The term is used when there is a point on the network where data flow is hindered and it's causing a data traffic jam. Bottleneck can happen in different areas in a network such as:
-- hardware
-- bandwidth
-- links that are too busy
+When this happens, it can cause:
+- **delays**
+- the **network to shut down**
 
-Finding and fixing bottlenecks is very important for keeping a network running at its best.
+> [!TIP]
+> **How to fix it**
+>
+> To fix these issues, a network architect can:
+> - **improve the network architecture**
+> - **optimize traffic flow** by using mechanisms such as **traffic shaping** and **priority scheduling**
+> - **make more resources available**
 
-#### Bandwidth
-The term bandwitdth refers to the maximum amount of data that can be sent over a network connection in a certain legth of time. It is usually measured in bits per second or bps such as megabits per second or gigabits per second.
+##### Bottleneck
+**Bottleneck** is the term used when there is a **point on the network where data flow is hindered**, causing a **data traffic jam**.
 
-It tells you how much data a network conneciton can carry which affects things like download speeds, video streaming quality, and how well the network performs overall.
+Bottlenecks can happen in **different areas** of a network, such as:
+- **hardware**
+- **bandwidth**
+- **links that are too busy**
 
-Example:
-If you have 100 megabits per second internet connection, that means that a maximum of 100 megabits of data can be transferred in 1 second
-If you have 500 megabits per second internet connection, that means that a maximum of 500 megabits of data can be transferred in 1 second
+**Finding and fixing bottlenecks** is very important for **keeping a network running at its best**.
 
-As an analogy we can think of water going through a pipe and depending upon the diameter of the pipe it will directly affect how much water can flow through it. 
-The smaller diameter pipe will represent a lower bandwidth connection.
-The larger diameter pipe will represent a higher bandwidth connection.
+> [!NOTE]
+> **Congestion vs. contention vs. bottleneck**
+>
+> | Issue | What happens | Can cause |
+> | --- | --- | --- |
+> | **Congestion** | A **shared resource is at capacity** | Poor network speeds, dropped packets |
+> | **Contention** | **Too many devices** are **fighting over the same resource** | Delays, the network shutting down |
+> | **Bottleneck** | A **point on the network** where **data flow is hindered** | A **data traffic jam** |
 
-The flow of water is traveling at the same rate in both pipes. Since the bottom pipe is wider than the top one, it's able to flow a lot more water at the same time more than a smaller pipe which can fill up the container at the other end a lot faster.
+---
+#### Performance Measures
+
+##### Bandwidth
+> [!NOTE]
+> **Definition**
+>
+> **Bandwidth** refers to the **maximum amount of data** that can be **sent over a network connection** in a **certain length of time**.
+
+- It is usually measured in **bits per second** (**bps**), such as **megabits per second** or **gigabits per second**.
+- It tells you **how much data a network connection can carry**, which affects things like **download speeds**, **video streaming quality**, and **how well the network performs overall**.
+
+> [!TIP]
+> **Example**
+>
+> | Internet connection | Maximum data transferred in 1 second |
+> | --- | --- |
+> | **100 megabits per second** | **100 megabits** |
+> | **500 megabits per second** | **500 megabits** |
+
+> [!TIP]
+> **Analogy: water through a pipe**
+>
+> Think of **water going through a pipe**: the **diameter of the pipe** directly affects **how much water can flow through it**.
+> - The **smaller diameter pipe** represents a **lower bandwidth** connection.
+> - The **larger diameter pipe** represents a **higher bandwidth** connection.
+>
+> The water is **flowing at the same rate in both pipes**. Since the **bottom pipe is wider than the top one**, it can carry **a lot more water at the same time** than the smaller pipe, so it **fills up the container at the other end a lot faster**.
+
 ![](images/bandwidth_pipes.gif)
 
-#### Latency
-The time it takes for a network to respond to a user's action is called network latency or lag.
-It is very important for networking performance especially for things that need to happen quickly such as internet gaming, video conferencing, and monet transfers.
+##### Latency
+- The **time it takes for a network to respond to a user's action** is called **network latency**, or **lag**.
+- It is very important for networking performance, especially for things that **need to happen quickly**, such as **internet gaming**, **video conferencing**, and **money transfers**.
+- Latency is usually **measured in milliseconds**.
 
 Latency can be caused by things such as:
-- network congestion
-- distance
-- server side issues
-- network hardware limitations
+- **network congestion**
+- **distance**
+- **server-side issues**
+- **network hardware limitations**
 
-Latency is usually measured in milliseconds.
 ![](images/latency.gif)
 
-#### Packet Loss
-When one or more
+##### Packet Loss
+When **one or more data packets** **don't arrive at their destination** during network transmission, it's known as **packet loss**.
+
+Packet loss can happen from:
+- **loss of power**
+- **network congestion**
+- **hardware and software issues**
+- **bad cables**
+- **security threats**
+
+When packet loss happens, it can cause a number of problems, such as:
+- a **decrease in network performance**
+- a **bad application experience**
+- a **reduction in network throughput**
+
+![](images/packet_loss.gif)
+
+##### Jitter
+- **Jitter** refers to **variation in the time when data packets arrive** at their destination.
+- We should expect data packets to **arrive on time**, but they **may arrive at different times**.
+
+This is caused by things like:
+- **network congestion**
+- **routing problems**
+- **hardware issues**
+- **incorrect quality of service configuration**
+
+![](images/jitter.gif)
+
+> [!NOTE]
+> **Bandwidth vs. latency vs. packet loss vs. jitter**
+>
+> | Term | Meaning | Measured in |
+> | --- | --- | --- |
+> | **Bandwidth** | The **maximum amount of data** sent over a connection in a certain length of time | **Bits per second** (bps) |
+> | **Latency** | The **time it takes** for a network to **respond** to a user's action | **Milliseconds** |
+> | **Packet loss** | Data packets that **don't arrive** at their destination | — |
+> | **Jitter** | **Variation in the time** when data packets arrive | — |
+
+---
+#### Wireless Issues
+
+##### Channel Overlap
+- When there are **multiple wireless networks in the same area**, **interference** and **slow speeds** can happen because of **wireless channel overlap**.
+- This happens when **numerous devices use the same or adjacent wireless channels**.
+
+![](images/channel_overlap.png)
+
+##### Signal Degradation
+- **Signal degradation** happens when a **wireless signal weakens** and **becomes corrupted during transmission**.
+- It can cause **errors** and **lag**.
+
+![](images/signal_degradation.gif)
+
+##### Client Disassociation
+- When a user is **connected to a wireless network** using their wireless device, another issue that can happen is **client disassociation**.
+- It happens when the user gets **unexpectedly disconnected from the Wi-Fi signal**.
+
+This could be the result of:
+- **interference from other devices**
+- **poor signal strength**
+- **hardware issues**
+- a **malicious attack**
+
+![](images/client_disassociation.png)
+
+##### Insufficient Wireless Coverage
+**Insufficient wireless coverage** means a **weak or erratic Wi-Fi signal**.
+
+It can happen from:
+- **router placement**
+- **obstacles**
+- **interference from other devices**
+- **old technology**
+
+> [!TIP]
+> **How to fix it**
+>
+> This could be resolved by:
+> - **moving the router**
+> - **improving its surroundings**
+> - using a **range extender** to **increase the coverage**
+
+![](images/insufficient_wireless_coverage.gif)
+
+##### Roaming Misconfiguration
+When a network has **several wireless access points** that are **not configured correctly**, it's known as **roaming misconfiguration**. It could cause problems with things such as:
+- **device handoffs between APs**
+- **dropped connections**
+- **poor performance**
+- **trouble sustaining uninterrupted connectivity** as users **move around the network**
+
+![](images/roaming_misconfiguration.gif)
+
+> [!NOTE]
+> **Wireless issues at a glance**
+>
+> | Issue | What happens |
+> | --- | --- |
+> | **Channel overlap** | Devices use the **same or adjacent wireless channels**: interference and slow speeds |
+> | **Signal degradation** | The wireless signal **weakens and becomes corrupted**: errors and lag |
+> | **Client disassociation** | The user gets **unexpectedly disconnected** from the Wi-Fi signal |
+> | **Insufficient wireless coverage** | A **weak or erratic** Wi-Fi signal |
+> | **Roaming misconfiguration** | Several access points **not configured correctly**: problems with handoffs and connectivity |
+
+[↑ Back to top](#networking)
+
+## Tools & commands
+
+### Software/Hardware Tools & Commands
+
+#### Command Line Tools
+Command line tools provide a **wealth of troubleshooting information** about **computers and networks**.
+
+##### Ping
+The most common command line tool is the **ping** command. It is used to **troubleshoot networking issues** such as **lag** and **network connectivity**.
+
+**For example, you can use the ping command to see if your computer can communicate with:**
+1. **another computer on your LAN**
+2. **another computer outside your network**, out on the **internet**
+
+**How to use it:**
+1. Open a **command prompt** and type the word `ping` along with the **IP address or the name** of the other computer.
+2. Your computer will **send out four data packets** to that computer and **wait for a response**.
+3. If the other computer **received your data packets**, it will **send the data packets back to you as a reply**.
+
+| Result | What it means |
+| --- | --- |
+| **Reply received** | There is **general network connectivity** between you and the other computer |
+| **No reply** | There is **no network connectivity** between the two computers (something as simple as a **disconnected cable**), **or** the other computer is **turned off**, **or** it is turned on but **blocking all ping requests** |
+
+![](images/ping.gif)
+
+The same thing goes if you **ping a server out on the internet**, by pinging a website using its **domain name**, such as `ping google.com`. If the reply was **successful**, that means the **google.com server is up and running** and **your computer can access the internet**.
+
+![](images/ping_internet.gif)
+
+##### Tracert
+**Tracert** stands for **trace route**.
+
+The internet is a **global network of routers** that gives networking devices the ability to **talk to each other from all over the world**. These routers **communicate with each other** so they can **direct, or route, the data** to its **intended destination**.
+
+- Tracert is used to **find the exact path a data packet takes**, and to **find potential problems**, such as **bottlenecks**, on its way to its destination.
+- To use the command, you type `tracert` and then the **IP address or domain name**, such as google.com. The data packet will then find its way to the destination.
+- Each time it **reaches a router on its path**, which is referred to as a **hop**, it'll **report back information about that router**, such as the **IP address** and the **time it took between each hop**, reported in **milliseconds**.
+
+> [!TIP]
+> Tracert is a great tool to **pinpoint where a problem lies** on a network, if there's a **bottleneck** somewhere or if the data packet **cannot reach its destination**.
+
+![](images/tracert.gif)
+
+##### Nslookup
+- **Nslookup** is short for **name server lookup**. This command is used for **looking up DNS information about a domain**.
+- **DNS resolves domain names to IP addresses.**
+
+> [!TIP]
+> **Example**
+>
+> You can **look up the IP address of a domain name**. At a command prompt, if you type `nslookup` along with a domain name, such as `nslookup google.com`, the result will give you **information about the google.com domain**, such as the **IP address**.
+
+![](images/nslookup.gif)
+
+##### ARP
+Where **DNS** is used to **resolve domain names to IP addresses**, **ARP** is used to **resolve IP addresses to MAC addresses**.
+
+In order for a computer to **communicate with another device**, it **needs to know the MAC address** of that device:
+1. The first thing a computer does when it is trying to communicate with another device is **check its ARP cache**, to see whether it **already has the MAC address** for that device. You can check this yourself at a command prompt by typing `ARP -a`.
+2. If there are **no entries**, the computer will **ask the computer with the corresponding IP address for its MAC address**.
+3. Once it has the MAC address, it'll **store this information in its ARP cache**.
+
+> [!TIP]
+> The ARP command is a good way to **manually check which IP address is associated with a certain MAC address**.
+
+![](images/arp.gif)
+
+##### Netstat
+**Netstat** stands for **network statistics**, and it is used to **display the current network connections** of your computer.
+
+> [!TIP]
+> **Example**
+>
+> If your computer is communicating with an **FTP server** and **two HTTP web servers**, you can verify that by using the netstat command. If you type `netstat -a` in a command prompt, you can see the **two HTTP servers** and the **FTP server** that the computer is connected to.
+
+- So if you are **not sure what connections your computer currently has**, you can use the netstat command to find out.
+- In addition to connections, it can display **which ports are open and listening for a connection**, and the **type of port it is using**, whether it's **TCP or UDP**.
+
+![](images/netstat.gif)
+
+##### Ipconfig
+- **Ipconfig** is used to **display the network configuration** of your computer.
+- If you believe you are having an **issue with certain services**, such as **DHCP**, **DNS**, or the **default gateway**, or you just want to **check your IP address**, you can use the ipconfig command.
+
+If you use `ipconfig /all` in a command prompt, it will display the **full TCP/IP configuration** of your computer:
+- **computer name**
+- **DHCP server**
+- **MAC address**
+- **IP address**
+- **default gateway**
+- **DNS servers**
+
+![](images/ipconfig.png)
+
+##### Tcpdump
+- **Tcpdump** is a **command-line program** that lets you **capture and analyze network traffic**.
+- It works **similar to a network packet sniffer**, **catching and showing the packets** that go through a **network interface** of your device.
+- It allows you to **look closely at and fix problems with a network**, and **check for security holes**.
+
+##### Nmap
+**Nmap** is an **open-source tool** for **analyzing a network** and for **security audits**.
+
+It uses **different scanning techniques**, such as **TCP/UDP scans** and **ICMP echo request scans**, to obtain information on:
+- **network devices**
+- **open ports**
+- **running services**
+
+![](images/nmap.png)
+
+> [!NOTE]
+> **Command line tools at a glance**
+>
+> | Command | What it does |
+> | --- | --- |
+> | `ping` | Checks **network connectivity** with another computer or server |
+> | `tracert` | Finds the **exact path** a data packet takes, **hop by hop** |
+> | `nslookup` | Looks up **DNS information** about a domain |
+> | `ARP -a` | Shows the **ARP cache**: IP addresses and their MAC addresses |
+> | `netstat -a` | Displays **current network connections** and **open/listening ports** |
+> | `ipconfig /all` | Displays the **full TCP/IP configuration** |
+> | `tcpdump` | **Captures and analyzes** network traffic |
+> | `nmap` | **Scans** a network for devices, open ports, and running services |
+
+---
+#### Show Commands
+When you need to **fix something on a network device**, such as a **router or a switch**, one of the **best and most basic command line tools** is `show [command]`.
+
+##### show mac-address-table
+This shows the **MAC address table** from a device such as a **Cisco switch**. It shows:
+- the **MAC addresses** that are connected to the switch
+- **which port** they are connected to
+- **which VLAN** they belong to
+
+![](images/show_mac_address_table.png)
+
+##### show ip route
+This shows the **routing table** from a device such as a **router**.
+
+![](images/show_ip_route.png)
+
+##### show interface
+- This shows **information about network interfaces**. It is used to **show the configuration** and can help **identify problems with a network interface**.
+- It shows whether the interface is **up**, **down**, or **disabled**, and it can also show the **speed of the interface**.
+
+![](images/show_interface.png)
+
+##### show config
+This is used to show a device's **current configuration**.
+
+![](images/show_config.png)
+
+##### show arp
+The show arp command **displays the ARP cache** on a device.
+
+![](images/show_arp.png)
+
+##### show vlan
+This shows information about **what VLANs are configured on a switch**. It shows things like the **VLAN IDs**, the **associated ports**, and **status**.
+
+![](images/show_vlan.png)
+
+##### show power
+The show power command shows information about **the power that a certain device uses**. It shows the **voltage**, **current**, and **how much power it's using**.
+
+![](images/show_power.png)
+
+> [!NOTE]
+> **Show commands at a glance**
+>
+> | Command | Shows |
+> | --- | --- |
+> | `show mac-address-table` | The **MAC address table**: MAC addresses, ports, and VLANs |
+> | `show ip route` | The **routing table** |
+> | `show interface` | **Interface information**: up/down/disabled, speed |
+> | `show config` | The device's **current configuration** |
+> | `show arp` | The **ARP cache** |
+> | `show vlan` | **Configured VLANs**: VLAN IDs, associated ports, status |
+> | `show power` | **Power usage**: voltage, current, and how much power |
+
+---
+#### LLDP / CDP
+**LLDP** (**Link Layer Discovery Protocol**) and **CDP** (**Cisco Discovery Protocol**) are **layer 2 protocols** that let you **find devices on your network that are close by**.
+
+Both of these protocols help you with **managing and fixing networks**, by giving information about the devices on the network, such as:
+- **what kind of devices** they are
+- **what the devices do**
+- **which ports** they use
+
+| | LLDP | CDP |
+| --- | --- | --- |
+| **Full name** | Link Layer Discovery Protocol | Cisco Discovery Protocol |
+| **Standard** | **Open** standard | **Cisco-only** standard |
+
+---
+#### Cable Tools
+
+##### Cable Tester
+If you are **making your own custom-length network cable**, you have to **cut the cable**, **arrange the wires**, **remove the plastic shielding**, and **crimp an RJ-45 connector** onto the ends.
+
+![](images/cable_cut_crimp.gif)
+
+The next thing to do is to **test the cable**, which is done by using a **cable tester**. The cable tester is used to **verify continuity** and **whether the wires are arranged correctly**.
+
+**How to use it:**
+1. **Connect both ends of the cable** into the tester.
+2. The tester will **cycle through all the pins** in the cable, to make sure that the cable is **properly wired and connected**.
+
+![](images/cable_tester.gif)
+
+##### Tone Generator
+A **tone generator** is a tool that is used for **tracing cables from one end to the other**.
+
+> [!TIP]
+> **The problem**
+>
+> You want to **isolate a network cable** and **find the other end** that is **connected to the patch panel**.
+> The patch panel has **multiple cables plugged into it**, and the patch panel is **located in a different part of the building**. In this scenario, it'll be **very difficult to find the other end of the cable**, and that is where a **tone generator** comes in.
+
+![](images/tone_generator.png)
+
+**How to use it:**
+1. **Connect the tone generator** at **one end of the cable** that you want to isolate.
+2. It will **generate a tone through the cable**, all the way to the **other end**.
+3. With a **probe**, you go **from cable to cable on the patch panel** until you find the cable.
+4. Once the probe **detects the tone** coming from the cable, the probe will **generate a sound**, indicating that it has **found the cable**.
+
+![](images/tone_generator.gif)
+
+##### Visual Fault Locator
+- A **visual fault locator** is a tool for **finding problems with fiber optic cables**.
+- It works by **sending a red laser light** into the **center of a fiber optic cable**.
+- If a problem is detected, such as a **break** or a **severe bend**, this red light will **escape at the point of the problem**.
+- The light that escapes from the cable can be **seen with the naked eye**, which allows you to **find the exact spot where the problem lies**.
+
+![](images/visual_fault_locator.png)
+
+---
+#### Network Testing & Monitoring Tools
+
+##### Speed Test
+- A **speed tester** is a **website tool** that tells you **how fast an internet connection is**, by measuring things like **download and upload speeds**, **lag**, and so on.
+- These tests will help you figure out **how fast your internet is** and **what might be wrong**.
+
+##### Wi-Fi Analyzer
+A **Wi-Fi analyzer** is a tool that helps you **understand and improve the operation of your wireless network**.
+
+It tells you about Wi-Fi signals:
+- **how strong** they are
+- **what channels** they are using
+- **what wireless access points** are nearby
+
+You can use this for things like:
+- **troubleshooting Wi-Fi problems**
+- finding **the best place to put your Wi-Fi access point**
+- choosing **the best channels to use** for your network
+
+![](images/wi_fi_analyzer.png)
+
+##### Network Tap
+A **network tap** enables a network administrator to **get in the path of network packets** for **monitoring purposes** and **data traffic collection**.
+
+> [!TIP]
+> **Example**
+>
+> If you wanted to **monitor a couple of devices**, such as a **router and a switch**:
+> 1. Connect a **network cable from the router** and **from the switch** into the **network tap**.
+> 2. Connect **another cable** into a device such as a **laptop**.
+> 3. The tap will now **collect the data packets** flowing **between the switch and the router**, and **send them to the laptop for analysis**.
+
+![](images/network_tap.png)
 
 [↑ Back to top](#networking)

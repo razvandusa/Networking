@@ -36,6 +36,7 @@ GROUPS = {
     "VPN & remote access": ["VPN & Connection Methods"],
     "Security": ["Network Security Concepts", "Types Of Attacks"],
     "Performance": ["Common Performance Issues"],
+    "Tools & commands": ["Software/Hardware Tools & Commands"],
 }
 
 CALLOUTS = {
@@ -80,6 +81,7 @@ def vault_files():
             files.setdefault(p.name, p)
             if p.suffix == ".md":
                 files.setdefault(p.stem, p)
+                files.setdefault(str(p.relative_to(VAULT).with_suffix("")), p)  # [[Folder/Note]] links
     return files
 
 
