@@ -201,27 +201,27 @@ My notes from the [CompTIA Network+ N10-009 Full Certification Course](https://w
 There are a few different categories of topologies:
 
 ##### 1. Star Topology
-![](images/star_topology.png)
+![](images/star_topology.gif)
 - All the computers are connected to a **central wiring point**.
 - **Advantage:** if one computer fails, the other computers **are not affected**, because each computer has its **own cable connection**.
 - **Disadvantage:** if the **central hub fails**, **all the computers are affected** (**single point of failure**).
 
 ##### 2. Mesh Topology
-![](images/mesh_topology.png)
+![](images/mesh_topology.gif)
 - **Each computer** on the network is connected to **every other computer** on the network.
 - **Advantage:** if one or more connections fail, the computers are **still able to communicate** with each other.
 - **Disadvantage:** because of the **amount of cabling**, mesh topologies can be **expensive**.
 
 ##### 3. Point-to-Point Topology
-![](images/point_to_point_topology.png)
+![](images/point_to_point_topology.gif)
 - **Two hosts** directly connected to each other using a **single cable**.
 
 ##### 4. Hybrid Topology
-![](images/hybrid_topology.png)
+![](images/hybrid_topology.gif)
 - Topologies can be **combined** with other topologies when needed.
 
 ##### 5. Spine-Leaf Topology
-![](images/spine_leaf_topology.png)
+![](images/spine_leaf_topology.gif)
 - Spine-leaf has **two layers of switches**: every switch in the lower layer connects to **every switch in the upper layer** (a **full mesh between the two layers**).
 - **Leaf:** the **access switches**. Servers, storage and firewalls attach here. Leaf switches **do not connect to each other**.
 - **Spine:** it **only carries traffic quickly between leaves**. Nothing else attaches to the spine, and spines **do not connect to each other**.
@@ -232,7 +232,7 @@ There are a few different categories of topologies:
 		- Need more **bandwidth between leaves** → add **spines**
 
 ##### 6. Three-Tier Hierarchical Model
-![](images/three_tier_hierarchical_model.png)
+![](images/three_tier_hierarchical_model.gif)
 - The three-tier model splits a network into **three layers**, each with a **specific job**:
 	1. **Access layer**
 		- Where **end devices connect**.
@@ -245,7 +245,7 @@ There are a few different categories of topologies:
 		- Needs **high availability and redundancy**: usually **at least two core switches** with **redundant links**, so if one fails, traffic just **reroutes around the failure in milliseconds**.
 
 ##### 7. Collapsed Core Model
-![](images/collapsed_core_model.png)
+![](images/collapsed_core_model.gif)
 - Designed for **smaller networks**.
 - It **combines the core and distribution layers** into one layer, creating a **two-tier** model.
 
@@ -254,11 +254,11 @@ There are a few different categories of topologies:
 In computer networking, there are terms for the **flow of traffic**:
 
 ##### East-west traffic
-![](images/east_west_traffic.png)
+![](images/east_west_traffic.gif)
 - Network traffic **between machines** in a particular **data center**.
 
 ##### North-south traffic
-![](images/north_south_traffic.png)
+![](images/north_south_traffic.gif)
 - Network traffic from a system that is physically located **outside the data center**.
 
 [↑ Back to top](#networking)
